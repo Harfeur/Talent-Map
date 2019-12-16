@@ -19,7 +19,7 @@
       <input id="taux" type="number" min=0>
     </form>
     <div class="row">
-      <div class="col">
+      <div class="col-6">
         <div class="tab-content" id="myTabContent">
           <form class="form-inline my-4" id="chposte">
             <label for="listePostes">Poste à afficher</label>
@@ -31,7 +31,7 @@
           </table>
         </div>
       </div>
-      <div class="col">
+      <div class="col-6">
         <div class="tab-content" id="myTabContent">
           <form class="form-inline my-4" id="chpersos">
             <label for="listePersos">Personnel à afficher</label>
@@ -51,6 +51,44 @@
   let taux = 5;
   let competencesPoste = []
 
+  function remplirChoixFormation(id) {
+    $.ajax({
+      method: 'GET',
+      url: 'suggestFormation/',
+      dataType: 'json',
+      data: {
+        "id": id
+      },
+      success: function (data) {
+        data.forEach(d => {
+          $(`#choix-form-${id}`).append(`<option data-id=${d.id}>${d.libelle}</option>`);
+        });
+      },
+      error: function (x, error) {
+        console.log(error);
+      }
+    });
+  }
+
+  function remplirChoixTuteur(id) {
+    $.ajax({
+      method: 'GET',
+      url: 'suggestTuteur/',
+      dataType: 'json',
+      data: {
+        "id": id
+      },
+      success: function (data) {
+        data.forEach(d => {
+          $(`#choix-tut-${id}`).append(`<option data-id=${d.id}>${d.libelle}</option>`);
+        });
+      },
+      error: function (x, error) {
+        console.log(error);
+      }
+    });
+  }
+
   function updateTable() {
     $.ajax({
       method: 'GET',
@@ -64,21 +102,23 @@
         $('#tabResulPerso').html("");
         competencesPoste.forEach((p) => {
           var d;
-          console.log(p)
-          console.log(data)
           data.forEach(da => {
             if (p.id == da.id) d = da;
           });
-          console.log(d)
+          textToSend = "";
           if (d != null) {
             color = "bg-white";
             if (p.pourcentRequis - d.pourcentAcquis > taux) color = "bg-danger";
             else if (p.pourcentRequis - d.pourcentAcquis <= 0) color = "bg-success";
-            $('#tabResulPerso').append(
-              `<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
+            textToSend+=`<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td>`;
+            if (color == "bg-danger") textToSend+=`<td><select id="choix-form-${p.id}"></select></td><td><select id="choix-tut-${p.id}"></select></td></tr>`;
+            else textToSend+=`</tr>`
+            $('#tabResulPerso').append(textToSend);
           } else {
             $('#tabResulPerso').append(`<tr><td class="bg-danger">${p.libelle} : 0%</td></tr>`);
           }
+          remplirChoixFormation(p.id);
+          remplirChoixTuteur(p.id);
         });
       },
       error: function (x, error) {
