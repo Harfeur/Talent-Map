@@ -20,8 +20,8 @@ app.get('/personnels', function(req, res) {
 	});
 });
 
-app.get('/competences', function(req, res) {
-	let sql = 'SELECT Libelle FROM Competences';
+app.get('/listeCompetences', function(req, res) {
+	let sql = 'SELECT * FROM Competences ORDER BY libelle ASC';
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
@@ -32,8 +32,8 @@ app.get('/competences', function(req, res) {
 
 
 app.get('/personnelCompetence', function(req, res) {
-	let libelle = req.query.libelle;
-	let sql = 'SELECT nom FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.fk_id_personnel and CompetencesPersonnels.fk_id_competence=Competences.id and Competences.libelle = \'' + libelle + '\'';
+	let query = req.query;
+	let sql = `SELECT nom, pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.fk_id_personnel and CompetencesPersonnels.fk_id_competence=Competences.id and Competences.id = ${query.id} and CompetencesPersonnels.pourcentAcquis >= ${query.pourcent} ORDER BY pourcentAcquis DESC`;
 	//sql.run(0, libelle);
 	//sql.finalize();
 	db.all(sql, [], (err, rows) => {
