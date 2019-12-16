@@ -1,0 +1,19 @@
+{
+  "name": "hackathon",
+  "version": "1.0.0",
+  "description": "Hackathon 2019 Back-Office",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Panzoli",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.7.9",
+    "bootstrap": "^4.4.1",
+    "dateformat": "^3.0.3",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "sqlite3": "^4.1.1"
+  }
+}
