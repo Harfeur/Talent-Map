@@ -69,7 +69,7 @@ app.get('/unposte', function(req, res) {
 
 app.get('/competencesPoste', function(req, res) {
 	let query = req.query;
-	let sql = `SELECT * FROM Postes, Competences, CompetencesPostes 
+	let sql = `SELECT Competences.libelle FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
 				and Postes.id=${query.id}`;
@@ -83,7 +83,7 @@ app.get('/competencesPoste', function(req, res) {
 
 app.get('/competPersCompetPoste', function(req, res) {
 	let query = req.query;
-	let sql = `SELECT Compete FROM Postes, Competences, CompetencesPostes 
+	let sql = `SELECT Competences.libelle, Competences FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
 				and Competences.libelle=${query.id}`;
