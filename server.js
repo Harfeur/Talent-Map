@@ -135,7 +135,7 @@ app.get('/suggestTuteur', function(req, res) {
 	let sql = `SELECT Personnels.id, Personnels.nom, CompetencesPersonnels.pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
 				where Competences.id=CompetencesPersonnels.fk_id_competence 
 				and CompetencesPersonnels.fk_id_personnel=Personnels.id
-				and Compenteces.id=${query.id}
+				and Competences.id=${query.id}
 				and CompetencesPersonnels.pourcentAcquis=100`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
