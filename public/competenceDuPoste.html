@@ -11,8 +11,8 @@
 
 <body ng-app="gpecApp" ng-controller="controleur">
   <div class="container">
-    
-  <h1>Chercher un poste</h1>
+
+    <h1>Chercher un poste</h1>
     <div class="row">
       <div class="col">
         <div class="tab-content" id="myTabContent">
@@ -99,13 +99,23 @@
         url: 'competencesPersonnel/',
         dataType: 'json',
         data: {
-          "id": Number($('#listePersos option:selected').attr('data-id'))
+          "idPersonnel": Number($('#listePersos option:selected').attr('data-id')),
+          "idPoste": Number($('#listePostes option:selected').attr('data-id'))
         },
         success: function (data) {
           competencesPoste = data
           $('#tabResulPerso').html("");
-          data.forEach((d) => {
-            $('#tabResulPerso').append(`<tr><td>${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
+          competencesPoste.forEach((p) => {
+            pourcentPerso = 0;
+            data.forEach(d => {
+              if (p.id == d.id) pourcentPerso = d.pourcentAcquis;
+            });
+            if (pourcentPerso != 0) {
+              color = "bg-white";
+              if (pourcentPerso - p.pourcentAcquis > taux) color = "bg-danger";
+              else if (pourcentPerso - p.pourcentAcquis <= 0) color = "bg-success";
+              $('#tabResulPerso').append(`<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
+            }
           });
         },
         error: function (x, error) {
