@@ -350,7 +350,7 @@ CREATE TABLE Formations (
 	libelle TEXT
 );
 
-INSERT INTO Formations(id,libelle,fk_id_competence) VALUES
+INSERT INTO Formations(id,libelle) VALUES
 (1,"Mettre au point une méthode analytique"),
 (2,"Appliquer les bonnes pratiques de laboratoire dans son champ d’activité"),
 (3,"Préparer la validation d'une méthode analytique"),
