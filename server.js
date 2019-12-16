@@ -10,6 +10,22 @@ app.use('/', express.static(__dirname + '/public/'));
 
 app.use('/packages', express.static(__dirname + '/node_modules/'));
 
+
+
+app.get('/unPersonnel', function(req, res) {
+	let query = req.query;
+	let sql = `SELECT * FROM Personnels, Services, Postes 
+				where Personnels.fk_id_service=Services.id
+				and Personnels.fk_id_poste=Postes.id
+				and id=${query.id}`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
 app.get('/personnels', function(req, res) {
 	let sql = 'SELECT * FROM Personnels ORDER BY nom ASC';
 	db.all(sql, [], (err, rows) => {
@@ -145,16 +161,7 @@ app.get('/suggestTuteur', function(req, res) {
 	});
 });
 
-app.get('/unPersonnel', function(req, res) {
-	let query = req.query;
-	let sql = `SELECT * FROM Personnels where id=${query.id}`;
-	db.all(sql, [], (err, rows) => {
-		if (err) {
-			throw err;
-		}
-		res.send(rows);
-	});
-});
+
 
 var port = 8080;
 var server = app.listen(port, function(){
