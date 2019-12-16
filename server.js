@@ -65,7 +65,7 @@ app.get('/postes', function(req, res) {
 /******************************************************************* */
 app.get('/unposte', function(req, res) {
 	let query = req.query;
-	let sql = 'SELECT * FROM Postes where id=${query.id}';
+	let sql = `SELECT * FROM Postes where id=${query.id}`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
