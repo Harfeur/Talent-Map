@@ -57,6 +57,7 @@ app.get('/postes', function(req, res) {
 });
 
 
+
 /******************************************************************* */
 /*
 						Comparatif Poste vs Personnel
@@ -90,10 +91,15 @@ app.get('/competencesPoste', function(req, res) {
 
 app.get('/competencesPersonnel', function(req, res) {
 	let query = req.query;
-	let sql = `SELECT Competences.libelle, CompetencesPersonnels.pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
+	let sql = `SELECT Competences.id, Competences.libelle, CompetencesPersonnels.pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
 				and CompetencesPersonnels.fk_id_competence=Competences.id
-				and Personnels.id=${query.id}`;
+				and Personnels.id=${query.idPersonnel}
+				Except
+				SELECT Competences.id, Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
+				where Postes.id=CompetencesPostes.fk_id_poste 
+				and CompetencesPostes.fk_id_competence=Competences.id
+				and Postes.id=${query.idPoste}`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
