@@ -33,7 +33,7 @@ app.get('/competences', function(req, res) {
 
 app.get('/personnelCompetence', function(req, res) {
 	let libelle = req.query.libelle;
-	var stmt = db.prepare('SELECT nom FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.id and CompetencesPersonnels.id=Personnels.id and Competences.libelle LIKE ?');
+	var stmt = db.prepare('SELECT nom FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.fk_id_personnel and CompetencesPersonnels.fk_id_competence=Personnels.id and Competences.libelle LIKE ?');
 	stmt.run(0, libelle);
 	stmt.finalize();
 	db.all(sql, [], (err, rows) => {
