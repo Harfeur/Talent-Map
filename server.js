@@ -26,7 +26,7 @@ app.get('/listeCompetences', function(req, res) {
 		if (err) {
 			throw err;
 		}
-		res.send(rows.sort());
+		res.send(rows);
 	});
 });
 
