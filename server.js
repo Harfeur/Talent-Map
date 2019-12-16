@@ -26,13 +26,16 @@ app.get('/competences', function(req, res) {
 		if (err) {
 			throw err;
 		}
-		res.send(rows);
+		res.send(rows.sort());
 	});
 });
 
+
 app.get('/personnelCompetence', function(req, res) {
 	let libelle = req.query.libelle;
-	let sql = 'SELECT Libelle FROM Competences where Libelle LIKE ?';
+	var stmt = db.prepare('SELECT nom FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.id and CompetencesPersonnels.id=Personnels.id and Competences.libelle LIKE ?');
+	stmt.run(0, libelle);
+	stmt.finalize();
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
