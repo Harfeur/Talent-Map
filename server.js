@@ -14,7 +14,7 @@ app.use('/packages', express.static(__dirname + '/node_modules/'));
 
 app.get('/unPersonnel', function(req, res) {
 	let query = req.query;
-	let sql = `SELECT *, Services.libelle AS serviceLibelle, Postes.libelle AS emploiLibelle FROM Personnels, Services, Postes 
+	let sql = `SELECT *, Services.libelle AS serviceLibelle, Postes.libelle AS PosteLibelle FROM Personnels, Services, Postes 
 				where Personnels.fk_id_service=Services.id
 				and Personnels.fk_id_poste=Postes.id
 				and Personnels.id=${query.id}`;
