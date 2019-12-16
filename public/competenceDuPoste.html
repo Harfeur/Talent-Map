@@ -13,25 +13,25 @@
   <div include-html="navbar.html"></div>
   <div class="container">
 
-    <h1>Chercher un poste</h1>
-    <form>
+    <h1 class="display-3">Chercher un poste</h1>
+    <form class="form-inline">
       <label for="taux">Taux</label>
-      <input class="form-control" id="taux" type="number" min=0>
+      <input class="form-control mx-2" id="taux" type="number" min=0>
     </form>
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         <div class="tab-content" id="myTabContent">
           <form class="form-inline my-4" id="chposte">
             <label for="listePostes">Poste à afficher</label>
-            <select class="form-control mx-2" id="listePostes">
+            <select class="form-control mx-2" style="max-width: 200px;" id="listePostes">
               <option selected disabled></option>
             </select>
           </form>
-          <table id="tabResulPoste" class="table">
+          <table id="tabResulPoste" style="text-align: center;" class="table">
           </table>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-8">
         <div class="tab-content" id="myTabContent">
           <form class="form-inline my-4" id="chpersos">
             <label for="listePersos">Personnel à afficher</label>
@@ -39,7 +39,7 @@
               <option selected disabled></option>
             </select>
           </form>
-          <table id="tabResulPerso" class="table">
+          <table id="tabResulPerso" style="text-align: center;" class="table">
           </table>
         </div>
       </div>
@@ -111,11 +111,11 @@
             if (p.pourcentRequis - d.pourcentAcquis > taux) color = "bg-danger";
             else if (p.pourcentRequis - d.pourcentAcquis <= 0) color = "bg-success";
             textToSend+=`<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td>`;
-            if (color == "bg-danger") textToSend+=`<td><select id="choix-form-${p.id}"></select></td><td><select id="choix-tut-${p.id}"></select></td></tr>`;
+            if (color == "bg-danger") textToSend+=`<td><select style="max-width: 200px;" id="choix-form-${p.id}"><option selected disabled></option></select></td><td><select style="max-width: 200px;" id="choix-tut-${p.id}"><option selected disabled></option></select></td></tr>`;
             else textToSend+=`</tr>`
             $('#tabResulPerso').append(textToSend);
           } else {
-            $('#tabResulPerso').append(`<tr><td class="bg-danger">${p.libelle} : 0%</td></tr>`);
+            $('#tabResulPerso').append(`<tr><td class="bg-danger">${p.libelle} : 0%</td><td><select style="max-width: 200px;" id="choix-form-${p.id}"><option selected disabled></option></select></td><td><select style="max-width: 200px;" id="choix-tut-${p.id}"><option selected disabled></option></select></td></tr></tr>`);
           }
           remplirChoixFormation(p.id);
           remplirChoixTuteur(p.id);
