@@ -107,13 +107,14 @@
           $('#tabResulPerso').html("");
           competencesPoste.forEach((p) => {
             pourcentPerso = 0;
-            data.forEach(d => {
-              if (p.id == d.id) pourcentPerso = d.pourcentAcquis;
+            var d;
+            data.forEach(da => {
+              if (p.id == d.id) d = da;
             });
             if (pourcentPerso != 0) {
               color = "bg-white";
-              if (pourcentPerso - p.pourcentAcquis > taux) color = "bg-danger";
-              else if (pourcentPerso - p.pourcentAcquis <= 0) color = "bg-success";
+              if (p.pourcentRequis - d.pourcentAcquis > taux) color = "bg-danger";
+              else if (p.pourcentRequis - d.pourcentAcquis <= 0) color = "bg-success";
               $('#tabResulPerso').append(`<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
             }
           });
