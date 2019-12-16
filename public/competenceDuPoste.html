@@ -14,6 +14,10 @@
   <div class="container">
 
     <h1>Chercher un poste</h1>
+    <form>
+      <label for="taux">Taux</label>
+      <input id="taux" type="number" min=0>
+    </form>
     <div class="row">
       <div class="col">
         <div class="tab-content" id="myTabContent">
@@ -44,9 +48,44 @@
   <script src="js/include-html.js"></script>
 </body>
 <script>
-
   let taux = 5;
   let competencesPoste = []
+
+  function updateTable() {
+    $.ajax({
+      method: 'GET',
+      url: 'competencesPersonnel/',
+      dataType: 'json',
+      data: {
+        "idPersonnel": Number($('#listePersos option:selected').attr('data-id')),
+        "idPoste": Number($('#listePostes option:selected').attr('data-id'))
+      },
+      success: function (data) {
+        $('#tabResulPerso').html("");
+        competencesPoste.forEach((p) => {
+          var d;
+          console.log(p)
+          console.log(data)
+          data.forEach(da => {
+            if (p.id == da.id) d = da;
+          });
+          console.log(d)
+          if (d != null) {
+            color = "bg-white";
+            if (p.pourcentRequis - d.pourcentAcquis > taux) color = "bg-danger";
+            else if (p.pourcentRequis - d.pourcentAcquis <= 0) color = "bg-success";
+            $('#tabResulPerso').append(
+              `<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
+          } else {
+            $('#tabResulPerso').append(`<tr><td class="bg-danger">${p.libelle} : 0%</td></tr>`);
+          }
+        });
+      },
+      error: function (x, error) {
+        console.log(error);
+      }
+    });
+  }
 
   $(document).ready(function () {
     $.ajax({
@@ -90,6 +129,8 @@
           data.forEach((d) => {
             $('#tabResulPoste').append(`<tr><td>${d.libelle} : ${d.pourcentRequis}%</td></tr>`);
           });
+          if ($('#listePersos option:selected').attr('disabled')) return;
+          updateTable();
         },
         error: function (x, error) {
           console.log(error);
@@ -98,39 +139,16 @@
     });
 
     $('#listePersos').change(function () {
-      $.ajax({
-        method: 'GET',
-        url: 'competencesPersonnel/',
-        dataType: 'json',
-        data: {
-          "idPersonnel": Number($('#listePersos option:selected').attr('data-id')),
-          "idPoste": Number($('#listePostes option:selected').attr('data-id'))
-        },
-        success: function (data) {
-          $('#tabResulPerso').html("");
-          competencesPoste.forEach((p) => {
-            var d;
-            console.log(p)
-            console.log(data)
-            data.forEach(da => {
-              if (p.id == da.id) d = da;
-            });
-            console.log(d)
-            if (d != null) {
-              color = "bg-white";
-              if (p.pourcentRequis - d.pourcentAcquis > taux) color = "bg-danger";
-              else if (p.pourcentRequis - d.pourcentAcquis <= 0) color = "bg-success";
-              $('#tabResulPerso').append(`<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
-            }
-            else {
-              $('#tabResulPerso').append(`<tr><td class="bg-danger">${p.libelle} : 0%</td></tr>`);
-            }
-          });
-        },
-        error: function (x, error) {
-          console.log(error);
-        }
-      });
+      if ($('#listePostes option:selected').attr('disabled')) return;
+      updateTable();
+    });
+
+    $('#taux').change(function () {
+      if ($('#taux').val() == undefined) return;
+      taux = Number($('#taux').val());
+      if ($('#listePostes option:selected').attr('disabled')) return;
+      if ($('#listePersos option:selected').attr('disabled')) return;
+      updateTable();
     });
   });
 </script>
