@@ -17,7 +17,7 @@ app.get('/unPersonnel', function(req, res) {
 	let sql = `SELECT * FROM Personnels, Services, Postes 
 				where Personnels.fk_id_service=Services.id
 				and Personnels.fk_id_poste=Postes.id
-				and id=${query.id}`;
+				and Personnels.id=${query.id}`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
