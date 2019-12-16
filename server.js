@@ -1,10 +1,15 @@
-var express = require('express');
-var app = express();
-var dateFormat = require('dateformat');
+const argv  = require('yargs').argv;
 
-var sqlite3 = require('sqlite3').verbose();
+const express = require('express');
+const app = express();
+const dateFormat = require('dateformat');
+
+const sqlite3 = require('sqlite3').verbose();
 
 let db = new sqlite3.Database('./database_modif.db');
+
+if (argv.dev) var port = 8080;
+else var port = 80;
 
 app.use('/', express.static(__dirname + '/public/'));
 
@@ -163,7 +168,6 @@ app.get('/suggestTuteur', function(req, res) {
 
 
 
-var port = 8080;
 var server = app.listen(port, function(){
   console.log('listening on *:'+port);
 });
