@@ -847,7 +847,7 @@ CREATE TABLE FormationsCompetences(
 );
 
 
-INSERT INTO CompetencesPostes(fk_id_formation,fk_id_competence) VALUES
+INSERT INTO FormationsCompetences(fk_id_formation,fk_id_competence) VALUES
 (1,1),
 (1,2),
 (1,3),
