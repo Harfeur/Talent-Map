@@ -26,14 +26,18 @@ app.get('/listeCompetences', function(req, res) {
 		if (err) {
 			throw err;
 		}
-		res.send(rows.sort());
+		res.send(rows);
 	});
 });
 
 
 app.get('/personnelCompetence', function(req, res) {
 	let query = req.query;
-	let sql = `SELECT nom, pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.fk_id_personnel and CompetencesPersonnels.fk_id_competence=Competences.id and Competences.id = ${query.id} and CompetencesPersonnels.pourcentAcquis >= ${query.pourcent} ORDER BY pourcentAcquis DESC`;
+	let sql = `SELECT nom, pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
+				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
+				and CompetencesPersonnels.fk_id_competence=Competences.id 
+				and Competences.id = ${query.id} 
+				and CompetencesPersonnels.pourcentAcquis >= ${query.pourcent} ORDER BY pourcentAcquis DESC`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
@@ -41,6 +45,42 @@ app.get('/personnelCompetence', function(req, res) {
 		res.send(rows);
 	});
 });
+
+app.get('/postes', function(req, res) {
+	let sql = 'SELECT * FROM Postes';
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
+app.get('/unposte', function(req, res) {
+	let query = req.query;
+	let sql = 'SELECT * FROM Postes where id=${query.id}';
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
+app.get('/competencesposte', function(req, res) {
+	let query = req.query;
+	let sql = `SELECT * FROM Postes, Competences, CompetencesPostes 
+				where Postes.id=CompetencesPostes.fk_id_poste 
+				and CompetencesPostes.fk_id_competence=Competences.id
+				and Competences.libelle=${query.id}`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
 
 var port = 8080;
 var server = app.listen(port, function(){
