@@ -145,6 +145,17 @@ app.get('/suggestTuteur', function(req, res) {
 	});
 });
 
+app.get('/unPersonnel', function(req, res) {
+	let query = req.query;
+	let sql = `SELECT * FROM Personnels where id=${query.id}`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
 var port = 8080;
 var server = app.listen(port, function(){
   console.log('listening on *:'+port);
