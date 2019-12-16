@@ -4,7 +4,7 @@ var dateFormat = require('dateformat');
 
 var sqlite3 = require('sqlite3').verbose();
 
-let db = new sqlite3.Database('./database.db');
+let db = new sqlite3.Database('./database_modif.db');
 
 app.use('/', express.static(__dirname + '/public/'));
 
