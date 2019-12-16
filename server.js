@@ -110,6 +110,25 @@ app.get('/competencesPersonnel', function(req, res) {
 
 
 
+/******************************************************************* */
+/*
+						Suggestions Formations
+*/
+/******************************************************************* */
+
+app.get('/suggestFormation', function(req, res) {
+	let query = req.query;
+	let sql = `SELECT Formations.id, Formations.libelle FROM Formations, Competences, FormationsCompetences 
+				where Formations.id=FormationsCompetences.fk_id_formation 
+				and FormationsCompetences.fk_id_competence=Competences.id
+				and Competences.id=${query.id}`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
 
 var port = 8080;
 var server = app.listen(port, function(){

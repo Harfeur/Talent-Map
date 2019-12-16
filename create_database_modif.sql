@@ -5,6 +5,99 @@
 -- EMPLOI
 -- ======================================================================
 
+/*
+
+DROP TABLE IF EXISTS Postes;
+
+CREATE TABLE Postes (
+	id INTEGER PRIMARY KEY,
+	libelle TEXT		
+);
+
+DROP TABLE IF EXISTS Services;
+
+CREATE TABLE Services (
+	id INTEGER PRIMARY KEY,
+	libelle TEXT
+);
+
+DROP TABLE IF EXISTS Personnels;
+
+CREATE TABLE Personnels (
+	id	INTEGER PRIMARY KEY,
+	nom TEXT NOT NULL,
+	prenoms TEXT NOT NULL,
+	adresse TEXT,
+	nationalité TEXT,
+	date_naissance DATE NOT NULL,
+	sexe TEXT,
+	service INTEGER NOT NULL,
+	fk_emploi INTEGER NOT NULL,
+	qualification TEXT,
+	n_plus_un INTEGER,
+	date_entrée TEXT,
+	date_retraite TEXT,
+	apprenti TEXT,
+	contrat_qualification TEXT,
+	contrat_adaptation TEXT,
+	cdd TEXT,
+	temps_partiel TEXT,
+	temporaire TEXT,
+	salaire_brut_annuel_2013 INTEGER,
+	variable_annuel_brut_2013 INTEGER,
+	salaire_brut_annuel_2019 INTEGER,
+	variable_annuel_brut_2019 INTEGER,
+	primes INTEGER,
+	annee_dernier_entretien_professionnel INTEGER,
+	annee_dernier_entretien_individuel INTEGER
+);
+
+DROP TABLE IF EXISTS Formations;
+
+CREATE TABLE Formations (
+	id INTEGER PRIMARY KEY,
+	libelle TEXT
+);
+
+DROP TABLE IF EXISTS FormationsCompetences;
+
+CREATE TABLE FormationsCompetences(
+	fk_id_formation INTEGER,
+	fk_id_competence INTEGER
+);
+
+DROP TABLE IF EXISTS FormationsPersonnels;
+
+CREATE TABLE FormationsPersonnels (
+	fk_id_formation INTEGER,
+	fk_id_personnel INTEGER
+);
+
+DROP TABLE IF EXISTS Competences;
+
+CREATE TABLE Competences (
+	id INTEGER PRIMARY KEY,
+	libelle TEXT,
+);
+
+DROP TABLE IF EXISTS CompetencesPostes;
+
+CREATE TABLE CompetencesPostes (
+	fk_id_competence INTEGER,
+	fk_id_poste INTEGER,
+	pourcentRequis INTEGER
+);
+
+DROP TABLE IF EXISTS CompetencesPersonnels;
+
+CREATE TABLE CompetencesPersonnels (
+	fk_id_competence INTEGER,
+	fk_id_personnel INTEGER,
+	pourcentAcquis INTEGER
+);
+
+*/
+
 DROP TABLE IF EXISTS Postes;
 
 CREATE TABLE Postes (
@@ -257,7 +350,7 @@ CREATE TABLE Formations (
 	libelle TEXT
 );
 
-INSERT INTO Formations(id,libelle) VALUES
+INSERT INTO Formations(id,libelle,fk_id_competence) VALUES
 (1,"Mettre au point une méthode analytique"),
 (2,"Appliquer les bonnes pratiques de laboratoire dans son champ d’activité"),
 (3,"Préparer la validation d'une méthode analytique"),
@@ -687,7 +780,7 @@ DROP TABLE IF EXISTS Competences;
 
 CREATE TABLE Competences (
 	id INTEGER PRIMARY KEY,
-	libelle TEXT
+	libelle TEXT,
 );
 
 INSERT INTO Competences(id,libelle) VALUES
@@ -722,7 +815,6 @@ INSERT INTO Competences(id,libelle) VALUES
 
 
 
-
 DROP TABLE IF EXISTS CompetencesPostes;
 
 CREATE TABLE CompetencesPostes (
@@ -731,15 +823,37 @@ CREATE TABLE CompetencesPostes (
 	pourcentRequis INTEGER
 );
 
+
 INSERT INTO CompetencesPostes(fk_id_competence,fk_id_poste,pourcentRequis) VALUES
 (1,1,85),
 (2,1,32),
 (3,1,28),
 (4,1,55),
 (5,1,95),
-(6,1,96);
+(6,1,96),
+(1,63,85),
+(2,63,32),
+(3,63,28),
+(4,63,55),
+(5,63,95),
+(6,63,96);
 
 
+DROP TABLE IF EXISTS FormationsCompetences;
+
+CREATE TABLE FormationsCompetences(
+	fk_id_formation INTEGER,
+	fk_id_competence INTEGER
+);
+
+
+INSERT INTO CompetencesPostes(fk_id_formation,fk_id_competence) VALUES
+(1,1),
+(1,2),
+(1,3),
+(2,1),
+(2,2),
+(3,3);
 
 --   ____                      _                  ____                     
 --  / ___|___  _ __ ___  _ __ | |_ _ __   ___ ___|  _ \ ___ _ __ ___  ___  
