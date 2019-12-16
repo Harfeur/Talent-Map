@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Voir un personnel</title>
+	<meta name="description" content="???">
+	<meta name="author" content="David Panzoli">
+	<link rel="stylesheet" type="text/css" href="/packages/bootstrap/dist/css/bootstrap.css" />
+	<script src="/packages/jquery/dist/jquery.min.js"></script>
+	<script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
+</head>
+
+<body ng-app="gpecApp" ng-controller="controleur">
+	<div include-html="navbar.html"></div>
+	<div class="container">
+		<h1 class="display-3">Fiche de personnel</h1>
+		<form class="form-inline">
+			<label for="postes">Nom du personnel à afficher</label>
+			<select class="mx-2 form-control" id="personnels">
+				<option disabled selected></option>
+			</select>
+		</form>
+	</div>
+	<div class="container">
+		<h1 style="font-size: 50px; text-align: center;" id="nom"></h1>
+		<div class="row">
+			<div class="col-3" id="adresse">
+            </div>
+			<div class="col-3" id="nationalité">
+            </div>
+			<div class="col-3" id="date-naissance">
+            </div>
+			<div class="col-3" id="sexe">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6" id ="service"></div>
+            <div class="col-4" id="emploi"></div>
+            <div class="col-2" id = "qualification"></div>
+        </div>
+	</div>
+	<script src="js/include-html.js"></script>
+</body>
+<script>
+	//either use jQuery
+	$(document).ready(function () {
+		$.ajax({
+			method: 'GET',
+			url: 'personnels/',
+			dataType: 'json',
+			success: function (data) {
+				data.forEach(function (d) {
+					$('#personnels').append(`<option data-id=${d.id}>${d.nom}</option>`);
+				});
+			},
+			error: function (x, error) {
+				console.log(error);
+			}
+		});
+
+		$('#personnels').change(function () {
+			$.ajax({
+				method: 'GET',
+				url: 'unPersonnel/',
+				dataType: 'json',
+				data: {
+					id: $('#personnels option:selected').attr('data-id')
+				},
+				success: function (data) {
+                    d = data[0];
+                    $('#nom').html(d.prenoms + " " + d.nom);
+                    $('#adresse').html("<strong>Adresse :</strong><br>" + d.adresse.replace(",", "<br>"));
+                    $('#nationalité').html("<strong>Nationalité :</strong><br>" + d.nationalité);
+                    var date = new Date(d.date_naissance);
+                    $('#date-naissance').html("<strong>Date de Naissance :</strong><br>" + date.toLocaleDateString('fr-FR', {year: 'numeric', month: 'long', day: 'numeric' }));
+                    $('#sexe').html("<strong>Sexe :</strong><br>" + d.sexe);
+                    $('#service').html("<strong>Service :</strong><br>" + d.serviceLibelle);
+                    $('#emploi').html("<strong>Emploi :</strong><br>" + d.emploiLibelle);
+                    $('#qualification').html("<strong>Qualification :</strong><br>" + d.qualification);
+				},
+				error: function (x, error) {
+					console.log(error);
+				}
+            });
+        });
+	});
+</script>
+
+</html>
