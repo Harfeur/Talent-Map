@@ -33,9 +33,9 @@ app.get('/competences', function(req, res) {
 
 app.get('/personnelCompetence', function(req, res) {
 	let libelle = req.query.libelle;
-	var stmt = db.prepare('SELECT nom FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.fk_id_personnel and CompetencesPersonnels.fk_id_competence=Personnels.id and Competences.libelle LIKE ?');
-	stmt.run(0, libelle);
-	stmt.finalize();
+	let sql = 'SELECT nom FROM Personnels, Competences, CompetencesPersonnels where Personnels.id=CompetencesPersonnels.fk_id_personnel and CompetencesPersonnels.fk_id_competence=Competences.id and Competences.libelle = \'' + libelle + '\'';
+	//sql.run(0, libelle);
+	//sql.finalize();
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;

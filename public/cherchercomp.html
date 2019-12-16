@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<meta charset="utf-8">
+<title>Chercher une compétence</title>
+<meta name="description" content="???">
+<link rel="stylesheet" type="text/css" href="/packages/bootstrap/dist/css/bootstrap.css" />
+<script src="/packages/jquery/dist/jquery.min.js"></script>
+<script src="/packages/angular/angular.min.js"></script>
+<script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
+</head>
+
+<body ng-app="gpecApp" ng-controller="controleur">
+  <div class="container">
+    <h1>Chercher une compétence</h1>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="jquery" role="tabpanel" aria-labelledby="jquery-tab">
+        <p>Sélectionnez la compétence recherchée</p>
+        <FORM>
+          <SELECT id="listeComp" name="compétence" size="1">
+          </SELECT>
+          <input type="number" id="pourcent" min=0 max=100 step=1 name="pourcentage/>
+        </FORM>
+        <table id="tabResul" class="table">
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  //either use jQuery or AngularJS...
+  $(document).ready(function () {
+    $.ajax({
+      method: 'GET',
+      url: 'competences/',
+      dataType: 'json',
+      success: function (data) {
+        (data).forEach(function (d, i) {
+          $('#listeComp').append(`<OPTION data-id=${d.id}> ${d.libelle} </OPTION>`);
+        });
+      },
+      error: function (x, error) {
+        console.log(error);
+      }
+    });
+    $("#listeComp").change(function () {
+      $('#tabResul').html("");
+      $.ajax({
+        method: 'GET',
+        url: 'personnelCompetence/',
+        dataType: 'json',
+        data: {"id": $('option:selected', this).attr('data-id'), "pourcent": $('#pourcent').val()},
+        success: function (data) {
+          (data).forEach(function (d, i) {
+            $('#tabResul').append('<tr ><td>' + d.nom + '</td>' +
+              '</tr>');
+          });
+        },
+        error: function (x, error) {
+          console.log(error);
+        }
+      });
+    });
+  });
+</script>
+
+</html>
