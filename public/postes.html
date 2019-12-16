@@ -1,72 +1,151 @@
 <!doctype html>
 <html>
-  <meta charset="utf-8">
-	  <title>Web-Application démarrage Hackathon</title>
-	  <meta name="description" content="???">
-		<meta name="author" content="David Panzoli">
-		<link rel = "stylesheet" type = "text/css" href = "/packages/bootstrap/dist/css/bootstrap.css" />
-		<script src="/packages/jquery/dist/jquery.min.js"></script>
-		<script src="/packages/angular/angular.min.js"></script>
-		<script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
-	</head>
-	<body ng-app="gpecApp" ng-controller="controleur">
+
+<head>
+	<meta charset="utf-8">
+	<title>Voir un poste</title>
+	<meta name="description" content="???">
+	<meta name="author" content="David Panzoli">
+	<link rel="stylesheet" type="text/css" href="/packages/bootstrap/dist/css/bootstrap.css" />
+	<script src="/packages/jquery/dist/jquery.min.js"></script>
+	<script src="/packages/angular/angular.min.js"></script>
+	<script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
+</head>
+
+<body ng-app="gpecApp" ng-controller="controleur">
+	<div include-html="navbar.html"></div>
 	<div class="container">
-	<h1>Application client</h1>
-	<ul class="nav nav-pills" id="myTab" role="tablist">
-	  <li class="nav-item">
-		<a class="nav-link active" id="jquery-tab" data-toggle="tab" href="#jquery" role="tab" aria-controls="jquery" aria-selected="true">jQuery</a>
-	  </li>
-	  <li class="nav-item">
-		<a class="nav-link" id="angular-tab" data-toggle="tab" href="#angular" role="tab" aria-controls="angular" aria-selected="false">Angular</a>
-	  </li>
-	</ul>
-	<div class="tab-content" id="myTabContent">
-	  <div class="tab-pane fade show active" id="jquery" role="tabpanel" aria-labelledby="jquery-tab">
-		<p>Données chargées avec jQuery</p>	
-		<table id="tabPersonnels_jQ" class="table">
-		</table>
-	  </div>
-	  <div class="tab-pane fade" id="angular" role="tabpanel" aria-labelledby="angular-tab">
-		<p>Données chargées avec angularJS</p>
-		<table id="tabPersonnels_An" class="table">
-			<tr ng-repeat="p in personnels">
-				<td> {{p.id}} </td>
-				<td> {{p.libelle}} </td>
-			</tr>
-		</table>
-	  </div>
+		<h1>Voir un poste</h1>
+		<form class="form-inline">
+			<label for="postes">Nom du poste à afficher</label>
+			<select class="mx-2 form-control" id="postes">
+				<option disabled selected></option>
+			</select>
+		</form>
 	</div>
+	<div class="container">
+		<h1 style="font-size: 80px; text-align: center;" id="titre-poste"></h1>
+		<div class="container">
+			<div class="col-6" id="competences">
+			</div>
+			<div class="col-6" id="personnels">
+			</div>
+		</div>
 	</div>
-	</body>
-	<script>
-		//either use jQuery
-		$(document).ready(function() {
+	<script src="js/include-html.js"></script>
+</body>
+<script>
+	let competencesPoste = [];
+
+	//either use jQuery
+	$(document).ready(function () {
+		$.ajax({
+			method: 'GET',
+			url: 'postes/',
+			dataType: 'json',
+			success: function (data) {
+				data.forEach(function (d) {
+					$('#postes').append(`<option data-id=${d.id}>${d.libelle}</option>`);
+				});
+			},
+			error: function (x, error) {
+				console.log(error);
+			}
+		});
+
+		$('#postes').change(function () {
+			$('#competences').html("");
+			$('#personnels').html("");
 			$.ajax({
 				method: 'GET',
-				url: 'postes/',
+				url: 'unposte/',
 				dataType: 'json',
-				success: function(data) {
-					(data).forEach(function(d,i) {
-						$('#tabPersonnels_jQ').append('<tr ><td>'+d.id+'</td><td>'+d.libelle+'</td></tr>');
-					});
+				data: {
+					id: $('#postes option:selected').attr('data-id')
 				},
-				error: function(x, error) {
+				success: function (data) {
+					d = data[0];
+					$('#titre-poste').html(d.libelle);
+				},
+				error: function (x, error) {
 					console.log(error);
 				}
 			});
-        });
-        
-        var app = angular.module('gpecApp', []);
-		
-		app.controller('controleur', function($scope, $http) {
-
-			$http.get('/personnels').then(function(response) {
-				$scope.personnels = response.data;
+			$.ajax({
+				method: 'GET',
+				url: 'competencesPoste/',
+				dataType: 'json',
+				data: {
+					id: $('#postes option:selected').attr('data-id')
+				},
+				success: function (data) {
+					competencesPoste = data;
+					$('#competences').append(
+						`<h2 style="text-align:center;">Compétences attendues :</h2>`);
+					data.forEach(d => {
+						$('#competences').append(
+							`<p style="text-align:center;">${d.libelle} (${d.pourcentRequis}%)</p>`
+						);
+					});
+				},
+				error: function (x, error) {
+					console.log(error);
+				}
 			});
-
-		});
-
-	</script>
+			$.ajax({
+				method: 'GET',
+				url: 'personnels/',
+				dataType: 'json',
+				success: function (data) {
+					$('#personnels').append(
+						`<h2 style="text-align:center;">Personnels ayant les capacités :</h2>`
+					);
+					data.forEach(d => {
+						var ok = true;
+						$.ajax({
+							method: 'GET',
+							url: 'competencesPersonnel/',
+							dataType: 'json',
+							data: {
+								"idPersonnel": d.id,
+								"idPoste": Number($(
+										'#postes option:selected')
+									.attr('data-id'))
+							},
+							success: function (data) {
+								competencesPoste.forEach((p) => {
+									if (!ok) return;
+									var dat;
+									data.forEach(da => {
+										if (p.id == da.id)
+											d = da;
+									});
+									if (dat != null) {
+										if (p.pourcentRequis - dat
+											.pourcentAcquis > 0)
+											ok = false;
+									} else {
+										ok = false;
+									}
+								});
+								if (ok) {
+									$('#personnels').append(
+										`<p style="text-align:center;">${d.nom}</p>`
+									);
+								}
+							},
+							error: function (x, error) {
+								console.log(error);
+							}
+						});
+					});
+				},
+				error: function (x, error) {
+					console.log(error);
+				}
+			});
+		})
+	});
+</script>
 
 </html>
-
