@@ -11,25 +11,38 @@
 
 <body ng-app="gpecApp" ng-controller="controleur">
   <div class="container">
-    <h1>Chercher un poste</h1>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="jquery" role="tabpanel" aria-labelledby="jquery-tab">
-
+    
+  <h1>Chercher un poste</h1>
+    <div class="row">
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
           <form class="form-inline my-4" id="chposte">
             <label for="listePostes">Poste à afficher</label>
             <select class="form-control mx-2" id="listePostes">
               <option selected disabled></option>
             </select>
           </form>
-        <table id="tabResul" class="table">
-        </table>
+          <table id="tabResulPoste" class="table">
+          </table>
+        </div>
+      </div>
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
+          <form class="form-inline my-4" id="chpersos">
+            <label for="listePersos">Personnel à afficher</label>
+            <select class="form-control mx-2" id="listePersos">
+              <option selected disabled></option>
+            </select>
+          </form>
+          <table id="tabResulPerso" class="table">
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </body>
 <script>
-  
-  let datas = [null, null, null];
+  let competencesPoste = []
 
   $(document).ready(function () {
     $.ajax({
@@ -37,8 +50,7 @@
       url: 'postes/',
       dataType: 'json',
       success: function (data) {
-        console.log(data)
-        data.forEach(function (d, i) {
+        data.forEach(function (d) {
           $('#listePostes').append(`<option data-id=${d.id}>${d.libelle}</option>`);
         });
       },
@@ -46,21 +58,60 @@
         console.log(error);
       }
     });
-
-    $('#listePostes').change(function() {
-      $.ajax({
+    $.ajax({
       method: 'GET',
-      url: 'competencesPoste/',
+      url: 'personnels/',
       dataType: 'json',
-      date: {"id": $('#listePostes option:selected').attr('data-id')},
       success: function (data) {
-        data.forEach()
-          $('#listePostes').append(`<tr><td>${libelle}</td></tr>`);
+        data.forEach(function (d) {
+          $('#listePersos').append(`<option data-id=${d.id}>${d.nom}</option>`);
+        });
       },
       error: function (x, error) {
         console.log(error);
       }
     });
+
+    $('#listePostes').change(function () {
+      $.ajax({
+        method: 'GET',
+        url: 'competencesPoste/',
+        dataType: 'json',
+        data: {
+          "id": Number($('#listePostes option:selected').attr('data-id'))
+        },
+        success: function (data) {
+          competencesPoste = data
+          $('#tabResulPoste').html("");
+          data.forEach((d) => {
+            $('#tabResulPoste').append(`<tr><td>${d.libelle} : ${d.pourcentRequis}%</td></tr>`);
+          });
+        },
+        error: function (x, error) {
+          console.log(error);
+        }
+      });
+    });
+
+    $('#listePersos').change(function () {
+      $.ajax({
+        method: 'GET',
+        url: 'competencesPersonnel/',
+        dataType: 'json',
+        data: {
+          "id": Number($('#listePersos option:selected').attr('data-id'))
+        },
+        success: function (data) {
+          competencesPoste = data
+          $('#tabResulPerso').html("");
+          data.forEach((d) => {
+            $('#tabResulPerso').append(`<tr><td>${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
+          });
+        },
+        error: function (x, error) {
+          console.log(error);
+        }
+      });
     });
   });
 </script>

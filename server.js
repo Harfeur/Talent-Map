@@ -11,7 +11,7 @@ app.use('/', express.static(__dirname + '/public/'));
 app.use('/packages', express.static(__dirname + '/node_modules/'));
 
 app.get('/personnels', function(req, res) {
-	let sql = 'SELECT * FROM Personnels ORDER BY libelle ASC';
+	let sql = 'SELECT * FROM Personnels ORDER BY nom ASC';
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
