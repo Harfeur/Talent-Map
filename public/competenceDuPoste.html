@@ -10,6 +10,7 @@
 </head>
 
 <body ng-app="gpecApp" ng-controller="controleur">
+  <div include-html="navbar.html"></div>
   <div class="container">
 
     <h1>Chercher un poste</h1>
@@ -40,8 +41,11 @@
       </div>
     </div>
   </div>
+  <script src="js/include-html.js"></script>
 </body>
 <script>
+
+  let taux = 5;
   let competencesPoste = []
 
   $(document).ready(function () {
@@ -103,19 +107,23 @@
           "idPoste": Number($('#listePostes option:selected').attr('data-id'))
         },
         success: function (data) {
-          competencesPoste = data
           $('#tabResulPerso').html("");
           competencesPoste.forEach((p) => {
-            pourcentPerso = 0;
             var d;
+            console.log(p)
+            console.log(data)
             data.forEach(da => {
-              if (p.id == d.id) d = da;
+              if (p.id == da.id) d = da;
             });
-            if (pourcentPerso != 0) {
+            console.log(d)
+            if (d != null) {
               color = "bg-white";
               if (p.pourcentRequis - d.pourcentAcquis > taux) color = "bg-danger";
               else if (p.pourcentRequis - d.pourcentAcquis <= 0) color = "bg-success";
               $('#tabResulPerso').append(`<tr><td class="${color}">${d.libelle} : ${d.pourcentAcquis}%</td></tr>`);
+            }
+            else {
+              $('#tabResulPerso').append(`<tr><td class="bg-danger">${p.libelle} : 0%</td></tr>`);
             }
           });
         },
