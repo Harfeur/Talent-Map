@@ -15,24 +15,48 @@
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="jquery" role="tabpanel" aria-labelledby="jquery-tab">
 
-        <form class="form-inline">
-          <div class="form-group">
-            <label for="listeComp">Compétence recherchée</label>
-            <select class="form-control" id="listeComp">
+          <form class="form-inline my-4" id="cmp1">
+            <label for="listeComp1">Compétence recherchée</label>
+            <select class="form-control mx-2" id="listeComp1">
+              <option selected disabled></option>
             </select>
-          </div>
-          <div class="form-group">
-            <div class="form-group">
-              <label for="pourcent">Pourcentage minimum</label>
-              <select class="form-control" id="pourcent">
-                <option pourc="25">Peu important</option>
-                <option pourc="50">Important</option>
-                <option pourc="75">Très important</option>
-              </select>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary" id="recherche">Rechercher</button>
-        </form>
+            <label for="pourcent1">Pourcentage minimum</label>
+            <select class="form-control mx-2" id="pourcent1">
+              <option selected disabled></option>
+              <option pourc=25>25%</option>
+              <option pourc=50>50%</option>
+              <option pourc=75>75%</option>
+              <option pourc=100>100%</option>
+            </select>
+          </form>
+          <form class="form-inline my-4" id="cmp2">
+            <label for="listeComp2">Compétence recherchée</label>
+            <select class="form-control mx-2" id="listeComp2">
+              <option selected disabled></option>
+            </select>
+            <label for="pourcent2">Pourcentage minimum</label>
+            <select class="form-control mx-2" id="pourcent2">
+              <option selected disabled></option>
+              <option pourc=25>25%</option>
+              <option pourc=50>50%</option>
+              <option pourc=75>75%</option>
+              <option pourc=100>100%</option>
+            </select>
+          </form>
+          <form class="form-inline my-4" id="cmp3">
+            <label for="listeComp3">Compétence recherchée</label>
+            <select class="form-control mx-2" id="listeComp3">
+              <option selected disabled></option>
+            </select>
+            <label for="pourcent3">Pourcentage minimum</label>
+            <select class="form-control mx-2" id="pourcent3">
+              <option selected disabled></option>
+              <option pourc=25>25%</option>
+              <option pourc=50>50%</option>
+              <option pourc=75>75%</option>
+              <option pourc=100>100%</option>
+            </select>
+          </form>
         <table id="tabResul" class="table">
         </table>
       </div>
@@ -40,15 +64,20 @@
   </div>
 </body>
 <script>
-  //either use jQuery or AngularJS...
+  
+  let datas = [null, null, null];
+
   $(document).ready(function () {
     $.ajax({
       method: 'GET',
       url: 'listeCompetences/',
       dataType: 'json',
       success: function (data) {
-        (data).forEach(function (d, i) {
-          $('#listeComp').append(`<OPTION data-id=${d.id}> ${d.libelle} </OPTION>`);
+        console.log(data)
+        data.forEach(function (d, i) {
+          $('#listeComp1').append(`<option data-id=${d.id}>${d.libelle}</option>`);
+          $('#listeComp2').append(`<option data-id=${d.id}>${d.libelle}</option>`);
+          $('#listeComp3').append(`<option data-id=${d.id}>${d.libelle}</option>`);
         });
       },
       error: function (x, error) {
@@ -56,26 +85,86 @@
       }
     });
 
-    $("#recherche").click(function (e) {
-      e.preventDefault();
-      $('#tabResul').html("");
+    function getData(num) {
+      let d;
       $.ajax({
         method: 'GET',
         url: 'personnelCompetence/',
         dataType: 'json',
         data: {
-          "id": $('#listeComp option:selected').attr('data-id'),
-          "pourcent": Number($('#pourcent option:selected').attr('pourc'))
+          "id": $(`#listeComp${num} option:selected`).attr('data-id'),
+          "pourcent": $(`#pourcent${num} option:selected`).attr('pourc'),
         },
         success: function (data) {
-          (data).forEach(function (d, i) {
-            $('#tabResul').append(`<tr><td> ${d.nom} : ${d.pourcentAcquis}% </td></tr>`);
-          });
+          datas[Number(num) - 1] = data;
+          assemblerData();
         },
         error: function (x, error) {
           console.log(error);
         }
       });
+    }
+
+    function assemblerData() {
+      sets = []
+      console.log(datas)
+      datas.forEach(data => {
+        if (data != null) sets.push(data);
+      });
+      while (sets.length > 1) {
+        data1 = sets[0]
+        data2 = sets[1]
+        var intersection = data1.filter(function(x) {
+          // checking second array contains the element "x"
+          bool = false
+          data2.forEach(d => {
+            if (x.nom == d.nom) bool = true;
+          });
+          return bool;
+        });
+        sets.shift()
+        sets[0] = intersection
+      }
+      data = sets[0];
+      data.forEach(d => {
+      $('#tabResul').append(`<tr><td>${d.nom}</td></tr>`);
+      });
+    }
+
+    $("#listeComp1").change(function () {
+      if ($('#pourcent1 option:selected').attr('disabled')) return;
+      $('#tabResul').html("");
+      getData("1");
+    });
+
+    $("#pourcent1").change(function () {
+      if ($('#listeComp1 option:selected').attr('disabled')) return;
+      $('#tabResul').html("");
+      getData("1");
+    });
+    
+    $("#listeComp2").change(function () {
+      if ($('#pourcent2 option:selected').attr('disabled')) return;
+      $('#tabResul').html("");
+      getData("2");
+    });
+
+    $("#pourcent2").change(function () {
+      if ($('#listeComp2 option:selected').attr('disabled')) return;
+      $('#tabResul').html("");
+      getData("2");
+    });
+    
+    $("#listeComp3").change(function () {
+      if ($('#pourcent3 option:selected').attr('disabled')) return;
+      $('#tabResul').html("");
+      getData("3");
+    });
+
+    $("#pourcent3").change(function () {
+      if ($('#listeComp3 option:selected').attr('disabled')) return;
+      $('#tabResul').html("");
+      datas[2] = getData("3");
     });
   });
 </script>
