@@ -47,7 +47,7 @@ app.get('/personnelCompetence', function(req, res) {
 });
 
 app.get('/postes', function(req, res) {
-	let sql = 'SELECT * FROM Postes ORDER BY libelle DESC';
+	let sql = 'SELECT * FROM Postes ORDER BY libelle ASC';
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
@@ -83,7 +83,7 @@ app.get('/competencesPoste', function(req, res) {
 
 app.get('/competPersCompetPoste', function(req, res) {
 	let query = req.query;
-	let sql = `SELECT Competences.libelle, Competences FROM Postes, Competences, CompetencesPostes 
+	let sql = `SELECT Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
 				and Competences.libelle=${query.id}`;
