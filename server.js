@@ -76,7 +76,7 @@ app.get('/unposte', function(req, res) {
 
 app.get('/competencesPoste', function(req, res) {
 	let query = req.query;
-	let sql = `SELECT Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
+	let sql = `SELECT Competences.id, Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
 				and Postes.id=${query.id}`;
@@ -95,7 +95,7 @@ app.get('/competencesPersonnel', function(req, res) {
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
 				and CompetencesPersonnels.fk_id_competence=Competences.id
 				and Personnels.id=${query.idPersonnel}
-				Except
+				EXCEPT
 				SELECT Competences.id, Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
