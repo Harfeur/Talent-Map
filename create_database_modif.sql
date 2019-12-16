@@ -720,6 +720,27 @@ INSERT INTO Competences(id,libelle) VALUES
 	(27,"Coordination de projets"),
 	(28,"Goût pour la transmission des savoirs");
 
+
+
+
+DROP TABLE IF EXISTS CompetencesPostes;
+
+CREATE TABLE CompetencesPostes (
+	fk_id_competence INTEGER,
+	fk_id_poste INTEGER,
+	pourcentRequis INTEGER
+);
+
+INSERT INTO CompetencesPostes(fk_id_competence,fk_id_poste,pourcentRequis) VALUES
+(1,1,85),
+(2,1,32),
+(3,1,28),
+(4,1,55),
+(5,1,95),
+(6,1,96);
+
+
+
 --   ____                      _                  ____                     
 --  / ___|___  _ __ ___  _ __ | |_ _ __   ___ ___|  _ \ ___ _ __ ___  ___  
 -- | |   / _ \| '_ ` _ \| '_ \| __| '_ \ / __/ _ \ |_) / _ \ '__/ __|/ _ \ 
