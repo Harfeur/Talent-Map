@@ -12,7 +12,7 @@
   <div include-html="navbar.html"></div>
   <div class="container">
 
-    <h1 class="display-3">Chercher un poste</h1>
+    <h1 class="display-3">Quoi pour qui ?</h1>
     <form class="form-inline">
       <label for="taux">Taux</label>
       <input class="form-control mx-2" id="taux" type="number" min=0>
@@ -241,7 +241,7 @@
       dataType: 'json',
       success: function (data) {
         data.forEach(function (d) {
-          $('#listePersos').append(`<option data-id=${d.id}>${d.nom}</option>`);
+          $('#listePersos').append(`<option data-id=${d.id}>${d.nom} ${d.prenoms} - ${posteLibelle}</option>`);
         });
       },
       error: function (x, error) {
