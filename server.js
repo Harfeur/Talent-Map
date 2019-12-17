@@ -47,7 +47,8 @@ app.get('/competencesDunPersonnel', function (req, res) {
 				FROM Personnels, Competences, CompetencesPersonnels
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
 				and CompetencesPersonnels.fk_id_competence=Competences.id
-				and Personnels.id=${query.id}`;
+				and Personnels.id=${query.id}
+				ORDER BY Competences.libelle`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
