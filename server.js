@@ -111,7 +111,7 @@ app.get('/competencesPersonnel', function(req, res) {
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
 				and CompetencesPersonnels.fk_id_competence=Competences.id
 				and Personnels.id=${query.idPersonnel}
-				EXCEPT
+				
 				SELECT Competences.id, Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
