@@ -816,7 +816,8 @@ INSERT INTO Competences(id,libelle) VALUES
 	(25,"Résistance au stress et à l'urgence"),
 	(26,"Diplomatie"),
 	(27,"Coordination de projets"), --2
-	(28,"Goût pour la transmission des savoirs");
+	(28,"Goût pour la transmission des savoirs"),
+	(29,"Autonomie");
 
 
 
@@ -861,7 +862,22 @@ INSERT INTO FormationsCompetences(fk_id_formation,fk_id_competence) VALUES
 (2,24),
 (2,25),
 (2,29),
-(3,3)
+(3,3),
+(24,5),
+(25,5),
+(29,5),
+(20,3),
+(48,3),
+(51,29),
+(18,1),
+(19,1),
+(32,4),
+(15,4),
+(14,4),
+(18,6),
+(19,6),
+(20,6),
+(21,6)
 ;
 
 --   ____                      _                  ____                     
