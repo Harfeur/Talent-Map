@@ -16,7 +16,7 @@ app.use('/packages', express.static(__dirname + '/node_modules/'));
 
 app.get('/unPersonnel', function (req, res) {
 	let query = req.query;
-	let sql = `SELECT *, Services.libelle AS serviceLibelle, Postes.libelle AS PosteLibelle FROM Personnels, Services, Postes 
+	let sql = `SELECT *, Services.libelle AS serviceLibelle, Postes.libelle AS posteLibelle FROM Personnels, Services, Postes 
 				where Personnels.fk_id_service=Services.id
 				and Personnels.fk_id_poste=Postes.id
 				and Personnels.id=${query.id}`;
@@ -210,8 +210,8 @@ app.get('/formationDateValidite', function(req, res) {
 				FROM Personnels, Formations, FormationsPersonnels 
 				WHERE Personnels.id = FormationsPersonnels.fk_id_personnel
 				and FormationsPersonnels.fk_id_formation = Formations.id
-				and FormationsPersonnels.date_validite != null
-				ORDER BY FormationsPersonnels.date_validite, Personnels.nom `;
+				and FormationsPersonnels.date_validite IS NOT NULL
+				ORDER BY FormationsPersonnels.date_validite, Personnels.nom`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
@@ -222,7 +222,7 @@ app.get('/formationDateValidite', function(req, res) {
 
 app.get('/ajoutFormationPersonnel', function(req, res) {
 	let query = req.query;
-	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},${query.dateFin},${query.heure},${query.dateValidite})`;
+	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},${query.dateFin},${query.heures},${query.dateValidite})`;
 	db.run(sql, ['C'], function(err) {
 		if (err) {
 		  return console.log(err.message);
