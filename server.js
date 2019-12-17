@@ -164,7 +164,7 @@ app.get('/suggestTuteur', function (req, res) {
 });
 
 app.get('/toutesFormations', function(req, res) {
-	let sql = `SELECT * FROM Formations`;
+	let sql = `SELECT * FROM Formations ORDER BY libelle`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
@@ -201,7 +201,7 @@ app.get('/formationDateValidite', function(req, res) {
 
 app.get('/ajoutFormation', function(req, res) {
 	let query = req.query;
-	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},)`;
+	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},${query.dateFin},${query.heure},${query.dateValidite})`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
