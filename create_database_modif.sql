@@ -790,7 +790,7 @@ CREATE TABLE Competences (
 	libelle TEXT
 );
 
-INSERT INTO Competences(id,libelle) VALUES
+INSERT INTO Competences(id,categorie,libelle) VALUES
 	(1,1,"Connaître la reglementation juridique"), --1
 	(2,1,"Connaissance du marché"), --1
 	(3,2,"Manager une équipe"), --2
