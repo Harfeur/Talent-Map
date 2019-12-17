@@ -101,6 +101,7 @@
 					);
 					data.forEach(d => {
 						var ok = true;
+						let moy = [];
 						$.ajax({
 							method: 'GET',
 							url: 'competencesPersonnel/',
@@ -117,19 +118,25 @@
 									var dat;
 									data.forEach(da => {
 										if (p.id == da.id)
-											d = da;
+											dat = da;
 									});
 									if (dat != null) {
 										if (p.pourcentRequis - dat
 											.pourcentAcquis > 0)
 											ok = false;
+										moy.push(dat.pourcentAcquis);
 									} else {
 										ok = false;
 									}
 								});
 								if (ok) {
+										somme = 0;
+										moy.forEach(x => {
+											somme+=x;
+										});
+										somme = somme/moy.length
 									$('#personnels').append(
-										`<p style="text-align:center;">${d.nom}</p>`
+										`<p style="text-align:center;" class="text-primary">${d.nom} ${d.prenoms} - ${d.posteLibelle} (${Math.round(somme)}%)</p>`
 									);
 								}
 							},
