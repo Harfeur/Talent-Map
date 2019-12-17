@@ -1,11 +1,19 @@
 <!doctype html>
 <html>
-<meta charset="utf-8">
-<title>Chercher une compétence</title>
-<meta name="description" content="???">
-<link rel="stylesheet" type="text/css" href="/packages/bootstrap/dist/css/bootstrap.css" />
-<script src="/packages/jquery/dist/jquery.min.js"></script>
-<script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
+
+<head>
+  <meta charset="utf-8">
+  <title>Chercher une compétence</title>
+  <meta name="description" content="???">
+  <link rel="stylesheet" type="text/css" href="/packages/bootstrap/dist/css/bootstrap.css" />
+  <script src="/packages/jquery/dist/jquery.min.js"></script>
+  <script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
+
+  <script src="js/RGraph.common.core.js"></script>
+	<script src="js/RGraph.common.dynamic.js"></script>
+	<script src="js/RGraph.common.tooltips.js"></script>
+	<script src="js/RGraph.common.effects.js"></script>
+	<script src="js/RGraph.radar.js"></script>
 </head>
 
 <body ng-app="gpecApp" ng-controller="controleur">
@@ -54,6 +62,11 @@
         </div>
       </div>
     </div>
+    <div class="row">
+			<canvas style="margin: auto; display: block; padding: 0;" id="cvs" width="500" height="400">
+				[No canvas support]
+			</canvas>
+		</div>
   </div>
   <div class="modal fade" id="detailsForm" tabindex="-1" role="dialog" aria-labelledby="fenetre" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -93,6 +106,43 @@
   let taux = 5;
   let competencesPoste = []
   let IDencours;
+
+	function afficherRadar(poste, persos, noms) {
+		new RGraph.Radar({
+			id: 'cvs',
+			data: [
+				poste, persos
+			],
+			options: {
+				backgroundCirclesPoly: true,
+				backgroundCirclesSpacing: 30,
+				colors: ['transparent'],
+				axesColor: 'transparent',
+				highlights: true,
+				colorsStroke: ['red', 'blue'],
+				linewidth: 3,
+				labels: noms,
+				textSize: 16
+			}
+		}).trace().responsive([{
+				maxWidth: 600,
+				width: 300,
+				height: 300,
+				css: {
+					'float': 'none'
+				}
+			},
+			{
+				maxWidth: null,
+				width: 500,
+				height: 400,
+				css: {
+					'float': 'right'
+				}
+			}
+		]);
+	}
+
 
   function remplirChoixFormation(id) {
     $.ajax({
@@ -159,6 +209,9 @@
   }
 
   function updateTable() {
+    let LPoste = [];
+    let LPersos = [];
+    let Lnoms = [];
     $.ajax({
       method: 'GET',
       url: 'competencesPersonnel/',
@@ -169,13 +222,18 @@
       },
       success: function (data) {
         $('#tabResulPerso').html("");
+        $('#tabChoixFormation').html("");
+        $('#boutonOk').html("");
         competencesPoste.forEach((p) => {
           var d;
           data.forEach(da => {
             if (p.id == da.id) d = da;
           });
+          LPoste.push(p.pourcentRequis);
+          Lnoms.push(p.libelle);
           textToSend = "";
           if (d != null) {
+            LPersos.push(d.pourcentAcquis);
             color = "bg-white";
             if (p.pourcentRequis - d.pourcentAcquis > taux) color = "bg-danger";
             else if (p.pourcentRequis - d.pourcentAcquis <= 0) color = "bg-success";
@@ -216,6 +274,8 @@
           remplirChoixFormation(p.id);
           remplirChoixTuteur(p.id);
         });
+        
+        afficherRadar(LPoste, LPersos, Lnoms);
       },
       error: function (x, error) {
         console.log(error);
@@ -229,8 +289,7 @@
     if ($('#dateRecyclage').attr('disabled') == undefined) {
       var dateRecyclage = new Date($('#dateRecyclage').val());
       var dateValidite = `${dateRecyclage.getFullYear()}-${dateRecyclage.getMonth() + 1}-${dateRecyclage.getDate()}`
-    }
-    else var dateValidite = "null";
+    } else var dateValidite = "null";
     $.ajax({
       method: 'GET',
       url: 'ajoutFormationPersonnel/',
@@ -241,10 +300,9 @@
         "dateDebut": `${dateDebut.getFullYear()}-${dateDebut.getMonth() + 1}-${dateDebut.getDate()}`,
         "dateFin": `${dateFin.getFullYear()}-${dateFin.getMonth() + 1}-${dateFin.getDate()}`,
         "heures": Number($('#heures').val()),
-        "dateValidite" : dateValidite,
+        "dateValidite": dateValidite,
       },
-      success: function (data) {
-      },
+      success: function (data) {},
       error: function (x, error) {
         console.log(error);
       }

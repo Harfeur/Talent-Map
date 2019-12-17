@@ -46,16 +46,16 @@
 			<div class="col-2" id="qualification"></div>
 		</div>
 		<div class="row">
-			<div class="col-4">
-				<table class="table" id="competences" style="margin-top: 20px;"></table>
-			</div>
-			<div class="col-4">
-				<table class="table" id="formations" style="margin-top: 20px;"></table>
-			</div>
-			<div class="col-4">
 			<canvas style="margin: auto; display: block; padding: 0;" id="cvs" width="500" height="400">
 				[No canvas support]
 			</canvas>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<table class="table" id="competences" style="margin-top: 20px;"></table>
+			</div>
+			<div class="col-6">
+				<table class="table" id="formations" style="margin-top: 20px;"></table>
 			</div>
 		</div>
 	</div>
@@ -64,7 +64,7 @@
 <script>
 	//either use jQuery
 
-	function afficherRadar(val, noms) {		
+	function afficherRadar(val, noms) {
 		new RGraph.Radar({
 			id: 'cvs',
 			data: [
@@ -78,6 +78,8 @@
 				highlights: true,
 				colorsStroke: ['red'],
 				linewidth: 3,
+				labels: noms,
+				textSize: 16
 			}
 		}).trace().responsive([{
 				maxWidth: 600,
@@ -155,6 +157,7 @@
 				},
 				success: function (data) {
 					let L = [];
+					let noms = [];
 					$('#competences').html("");
 					$('#competences').append(
 						`<tr class="table-primary"><th scope="col">Compétences</th><th></th></tr>`
@@ -165,9 +168,10 @@
 								`<tr><td>${d.libelle}</td><td>${d.pourcentAcquis}</td></tr>`
 							);
 							L.push(d.pourcentAcquis);
+							noms.push(d.libelle);
 						}
 					});
-					afficherRadar(L);
+					afficherRadar(L, noms);
 				},
 				error: function (x, error) {
 					console.log(error);
