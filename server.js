@@ -29,7 +29,9 @@ app.get('/unPersonnel', function (req, res) {
 });
 
 app.get('/personnels', function (req, res) {
-	let sql = 'SELECT * FROM Personnels ORDER BY nom ASC';
+	let sql = `SELECT *, Services.libelle AS serviceLibelle, Postes.libelle AS posteLibelle FROM Personnels, Services, Postes
+				where Personnels.fk_id_service=Services.id
+				and Personnels.fk_id_poste=Postes.id`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
