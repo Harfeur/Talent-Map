@@ -204,7 +204,9 @@ app.get('/formationsUnPersonnel', function(req, res) {
 	let query = req.query;
 	let sql = `SELECT * 
 				FROM Formations, Personnels, FormationsPersonnels 
-				WHERE Personnels.id = ${query.id} 
+				WHERE Formations.id=FormationsPersonnels.fk_id_formation
+				and FormationsPersonnels.fk_id_personnel=Personnels.id
+				and Personnels.id = ${query.id} 
 				ORDER BY libelle`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
