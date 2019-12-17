@@ -208,7 +208,7 @@ app.get('/ajoutFormation', function(req, res) {
 		return this.lastID;
 	  });
 });
-
+ 
 app.get('/formationDateValidite', function(req, res) {
 	let query = req.query;
 	let sql = `SELECT Personnels.id, Personnels.nom, Formations.id, Formations.libelle, FormationsPersonnels.date_validite 
