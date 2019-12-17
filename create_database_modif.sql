@@ -854,7 +854,11 @@ INSERT INTO FormationsCompetences(fk_id_formation,fk_id_competence) VALUES
 (1,3),
 (2,1),
 (2,2),
-(3,3);
+(2,24),
+(2,25),
+(2,29),
+(3,3)
+;
 
 --   ____                      _                  ____                     
 --  / ___|___  _ __ ___  _ __ | |_ _ __   ___ ___|  _ \ ___ _ __ ___  ___  
