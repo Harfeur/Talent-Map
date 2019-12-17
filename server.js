@@ -227,7 +227,7 @@ app.get('/formationDateValidite', function(req, res) {
 
 app.get('/ajoutFormationPersonnel', function(req, res) {
 	let query = req.query;
-	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},${query.dateFin},${query.heures},${query.dateValidite})`;
+	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idFormation},${query.idPersonnel},${query.dateDebut},${query.dateFin},${query.heures},${query.dateValidite})`;
 	db.run(sql, ['C'], function(err) {
 		if (err) {
 		  return console.log(err.message);
