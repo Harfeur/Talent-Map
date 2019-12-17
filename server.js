@@ -163,6 +163,14 @@ app.get('/suggestTuteur', function (req, res) {
 	});
 });
 
+
+/******************************************************************* */
+/*
+						Formations
+*/
+/******************************************************************* */
+
+
 app.get('/toutesFormations', function(req, res) {
 	let sql = `SELECT * FROM Formations ORDER BY libelle`;
 	db.all(sql, [], (err, rows) => {
@@ -184,6 +192,18 @@ app.get('/uneFormation', function(req, res) {
 	});
 });
 
+app.get('/ajoutFormation', function(req, res) {
+	let query = req.query;
+	let sql = `INSERT INTO Formations (libelle) VALUES (${query.libelle})`;
+	db.run(sql, ['C'], function(err) {
+		if (err) {
+		  return console.log(err.message);
+		}
+		// get the last insert id
+		console.log(`A row has been inserted with rowid ${this.lastID}`);
+	  });
+});
+
 app.get('/formationDateValidite', function(req, res) {
 	let query = req.query;
 	let sql = `SELECT Personnels.id, Personnels.nom, Formations.id, Formations.libelle, FormationsPersonnels.date_validite 
@@ -199,7 +219,7 @@ app.get('/formationDateValidite', function(req, res) {
 	});
 });
 
-app.get('/ajoutFormation', function(req, res) {
+app.get('/ajoutFormationPersonnel', function(req, res) {
 	let query = req.query;
 	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},${query.dateFin},${query.heure},${query.dateValidite})`;
 	db.run(sql, ['C'], function(err) {
