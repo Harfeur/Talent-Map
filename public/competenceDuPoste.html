@@ -81,8 +81,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">Annuler</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" id="save">Enregistrer</button>
         </div>
       </div>
     </div>
@@ -92,6 +92,7 @@
 <script>
   let taux = 5;
   let competencesPoste = []
+  let IDencours;
 
   function remplirChoixFormation(id) {
     $.ajax({
@@ -105,7 +106,7 @@
         data.forEach(d => {
           $(`#choix-form-${id}`).append(`<option data-id=${d.id}>${d.libelle}</option>`);
         });
-        $(`#choix-form-${id}`).append(`<option data-id=-1>Créer une formation</option>`);
+        $(`#choix-form-${id}`).append(`<option data-id=-1>Créer une action/formation</option>`);
       },
       error: function (x, error) {
         console.log(error);
@@ -131,10 +132,11 @@
       }
     });
   }
-  
+
 
   function updateModal(id) {
     var formId = $(`#choix-form-${id} option:selected`).attr("data-id");
+    IDencours = formId
     if (formId > 0) {
       $.ajax({
         method: 'GET',
@@ -221,6 +223,34 @@
     });
   }
 
+  function updateFormation(id) {
+    var dateDebut = new Date($('#dateDebut').val());
+    var dateFin = new Date($('#dateFin').val());
+    if ($('#dateRecyclage').attr('disabled') == undefined) {
+      var dateRecyclage = new Date($('#dateRecyclage').val());
+      var dateValidite = `${dateRecyclage.getFullYear()}-${dateRecyclage.getMonth() + 1}-${dateRecyclage.getDate()}`
+    }
+    else var dateValidite = "null";
+    $.ajax({
+      method: 'GET',
+      url: 'ajoutFormationPersonnel/',
+      dataType: 'json',
+      data: {
+        "idPersonnel": $('#listePersos option:selected').attr('data-id'),
+        "idFormation": IDencours,
+        "dateDebut": `${dateDebut.getFullYear()}-${dateDebut.getMonth() + 1}-${dateDebut.getDate()}`,
+        "dateFin": `${dateFin.getFullYear()}-${dateFin.getMonth() + 1}-${dateFin.getDate()}`,
+        "heures": Number($('#heures').val()),
+        "dateValidite" : dateValidite,
+      },
+      success: function (data) {
+      },
+      error: function (x, error) {
+        console.log(error);
+      }
+    });
+  }
+
   $(document).ready(function () {
     $.ajax({
       method: 'GET',
@@ -241,9 +271,10 @@
       dataType: 'json',
       success: function (data) {
         data.forEach(function (d) {
-          
+
           console.log(d)
-          $('#listePersos').append(`<option data-id=${d.id}>${d.nom} ${d.prenoms} - ${d.posteLibelle}</option>`);
+          $('#listePersos').append(
+            `<option data-id=${d.id}>${d.nom} ${d.prenoms} - ${d.posteLibelle}</option>`);
         });
       },
       error: function (x, error) {
@@ -251,11 +282,33 @@
       }
     });
 
-    $('#recyclage').change(function() {
+    $('#save').click(e => {
+      if ($('#label').attr('disabled') == undefined) {
+        $.ajax({
+          method: 'GET',
+          url: 'ajoutFormation/',
+          dataType: 'json',
+          data: {
+            "libelle": $('#label').val()
+          },
+          success: function (data) {
+            updateFormation(data);
+          },
+          error: function (x, error) {
+            console.log(error);
+          }
+        });
+
+      } else {
+        updateFormation(Number(IDencours));
+      }
+
+    });
+
+    $('#recyclage').change(function () {
       if (this.checked) {
         $('#dateRecyclage').removeAttr("disabled");
-      }
-      else {
+      } else {
         $('#dateRecyclage').attr('disabled', true);
       }
     });
