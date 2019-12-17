@@ -370,16 +370,16 @@ INSERT INTO Formations(id,libelle) VALUES
 (17,"Utiliser des documents techniques"),
 (18,"Améliorer le passage de consignes et la description d’anomalies"),
 (19,"Communiquer dans ses activités de production en utilisant le vocabulaire anglais technique associé"),
-(20,"Communiquer efficacement dans ses activités professionnelles"),
+(20,"Communiquer efficacement dans ses activités professionnelles"), -- Sens relat
 (21,"Conduire un projet"),
 (22,"Encadrer une équipe"),
 (23,"Manager la performance "),
-(24,"Rédiger des écrits professionnels"),
-(25,"Communiquer pour convaincre"),
+(24,"Rédiger des écrits professionnels"), --Comunication
+(25,"Communiquer pour convaincre"), -- IDem
 (26,"Développer ses compétences en bioproduction"),
 (27,"Intégrer dans son activité les concepts fondamentaux de la chimie"),
 (28,"Le bionettoyage"),
-(29,"Maîtriser son comportement et sa gestuelle en environnement ZAC"),
+(29,"Maîtriser son comportement et sa gestuelle en environnement ZAC"), -- Idem
 (30,"Mettre en oeuvre la maintenance préventive de 1er niveau"),
 (31,"Réaliser un pré-diagnostic de pannes"),
 (32,"Superviser un procédé de bioproduction"),
@@ -398,9 +398,10 @@ INSERT INTO Formations(id,libelle) VALUES
 (45,"Marque employeur"),
 (46,"Piloter sa Gpec"),
 (47,"Mener les Entretiens professionnels et individuels"),
-(48,"Perfectionner son rôle d'hôtesse d'accueil"),
+(48,"Perfectionner son rôle d'hôtesse d'accueil"), -- Sens relat
 (49,"Excel base"),
-(50,"Excel perfectionnement");
+(50,"Excel perfectionnement"),
+(51,"Savoir prendre des decisions"); -- Autonomie
 
 
 --  _____                          _   _                 ____                     
@@ -788,15 +789,15 @@ CREATE TABLE Competences (
 );
 
 INSERT INTO Competences(id,libelle) VALUES
-	(1,"Autonomie"),
-	(2,"Adaptabilité"),
-	(3,"Persévérance"),
-	(4,"Empathie"),
-	(5,"Communication"),
-	(6,"Sens du relationnel"),
-	(7,"Respect des règles d’éthique"),
-	(8,"Organisation"),
-	(9,"Force de proposition"),
+	(1,"Connaître la reglementation juridique"), --1
+	(2,"Connaissance du marché"), --1
+	(3,"Manager une équipe"), --2
+	(4,"Gérer un conflit"), --2
+	(5,"Communication"), --3
+	(6,"Sens du relationnel"), --3
+	(7,"Respect des règles d’éthique"), --3
+	(8,"Organisation"), --2
+	(9,"Force de proposition"), --3
 	(10,"Rigueur"),
 	(11,"Négociation"),
 	(12,"Sens du relationnel et travail en équipe"),
@@ -814,7 +815,7 @@ INSERT INTO Competences(id,libelle) VALUES
 	(24,"Esprit de synthèse"),
 	(25,"Résistance au stress et à l'urgence"),
 	(26,"Diplomatie"),
-	(27,"Coordination de projets"),
+	(27,"Coordination de projets"), --2
 	(28,"Goût pour la transmission des savoirs");
 
 

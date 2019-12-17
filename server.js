@@ -14,7 +14,7 @@ app.use('/packages', express.static(__dirname + '/node_modules/'));
 
 
 
-app.get('/unPersonnel', function(req, res) {
+app.get('/unPersonnel', function (req, res) {
 	let query = req.query;
 	let sql = `SELECT *, Services.libelle AS serviceLibelle, Postes.libelle AS PosteLibelle FROM Personnels, Services, Postes 
 				where Personnels.fk_id_service=Services.id
@@ -28,7 +28,7 @@ app.get('/unPersonnel', function(req, res) {
 	});
 });
 
-app.get('/personnels', function(req, res) {
+app.get('/personnels', function (req, res) {
 	let sql = 'SELECT * FROM Personnels ORDER BY nom ASC';
 	db.all(sql, [], (err, rows) => {
 		if (err) {
@@ -38,7 +38,7 @@ app.get('/personnels', function(req, res) {
 	});
 });
 
-app.get('/listeCompetences', function(req, res) {
+app.get('/listeCompetences', function (req, res) {
 	let sql = 'SELECT * FROM Competences ORDER BY libelle ASC';
 	db.all(sql, [], (err, rows) => {
 		if (err) {
@@ -49,7 +49,7 @@ app.get('/listeCompetences', function(req, res) {
 });
 
 
-app.get('/personnelCompetence', function(req, res) {
+app.get('/personnelCompetence', function (req, res) {
 	let query = req.query;
 	let sql = `SELECT nom, pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
@@ -64,7 +64,7 @@ app.get('/personnelCompetence', function(req, res) {
 	});
 });
 
-app.get('/postes', function(req, res) {
+app.get('/postes', function (req, res) {
 	let sql = 'SELECT * FROM Postes ORDER BY libelle ASC';
 	db.all(sql, [], (err, rows) => {
 		if (err) {
@@ -81,7 +81,7 @@ app.get('/postes', function(req, res) {
 						Comparatif Poste vs Personnel
 */
 /******************************************************************* */
-app.get('/unposte', function(req, res) {
+app.get('/unposte', function (req, res) {
 	let query = req.query;
 	let sql = `SELECT * FROM Postes where id=${query.id}`;
 	db.all(sql, [], (err, rows) => {
@@ -92,7 +92,7 @@ app.get('/unposte', function(req, res) {
 	});
 });
 
-app.get('/competencesPoste', function(req, res) {
+app.get('/competencesPoste', function (req, res) {
 	let query = req.query;
 	let sql = `SELECT Competences.id, Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
@@ -107,17 +107,17 @@ app.get('/competencesPoste', function(req, res) {
 });
 
 
-app.get('/competencesPersonnel', function(req, res) {
+app.get('/competencesPersonnel', function (req, res) {
 	let query = req.query;
-	let sql = `SELECT Competences.id, Competences.libelle, CompetencesPersonnels.pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
+	let sql = `SELECT Competences.id, Competences.libelle, CompetencesPersonnels.pourcentAcquis
+				FROM Personnels, Competences, CompetencesPersonnels
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
 				and CompetencesPersonnels.fk_id_competence=Competences.id
 				and Personnels.id=${query.idPersonnel}
-				
-				SELECT Competences.id, Competences.libelle, CompetencesPostes.pourcentRequis FROM Postes, Competences, CompetencesPostes 
+				and Competences.id IN (SELECT Competences.id FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
-				and Postes.id=${query.idPoste}`;
+				and Postes.id=${query.idPoste});`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
@@ -134,7 +134,7 @@ app.get('/competencesPersonnel', function(req, res) {
 */
 /******************************************************************* */
 
-app.get('/suggestFormation', function(req, res) {
+app.get('/suggestFormation', function (req, res) {
 	let query = req.query;
 	let sql = `SELECT Formations.id, Formations.libelle FROM Formations, Competences, FormationsCompetences 
 				where Formations.id=FormationsCompetences.fk_id_formation 
@@ -148,7 +148,7 @@ app.get('/suggestFormation', function(req, res) {
 	});
 });
 
-app.get('/suggestTuteur', function(req, res) {
+app.get('/suggestTuteur', function (req, res) {
 	let query = req.query;
 	let sql = `SELECT Personnels.id, Personnels.nom, CompetencesPersonnels.pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
 				where Competences.id=CompetencesPersonnels.fk_id_competence 
@@ -200,7 +200,6 @@ app.get('/ajoutFormation', function(req, res) {
 	});
 });
 
-var server = app.listen(port, function(){
-  console.log('listening on *:'+port);
+var server = app.listen(port, function () {
+	console.log('listening on *:' + port);
 });
-
