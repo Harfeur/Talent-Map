@@ -210,7 +210,8 @@ app.get('/formationDateValidite', function(req, res) {
 				FROM Personnels, Formations, FormationsPersonnels 
 				WHERE Personnels.id = FormationsPersonnels.fk_id_personnel
 				and FormationsPersonnels.fk_id_formation = Formations.id
-				and FormationsPersonnels.date_validite != null`;
+				and FormationsPersonnels.date_validite != null
+				ORDER BY FormationsPersonnels.date_validite, Personnels.nom `;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
