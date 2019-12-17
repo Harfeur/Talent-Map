@@ -41,6 +41,21 @@ app.get('/personnels', function (req, res) {
 	});
 });
 
+app.get('/competencesDunPersonnel', function (req, res) {
+	let query = req.query;
+	let sql = `SELECT Competences.id, Competences.libelle, CompetencesPersonnels.pourcentAcquis
+				FROM Personnels, Competences, CompetencesPersonnels
+				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
+				and CompetencesPersonnels.fk_id_competence=Competences.id
+				and Personnels.id=${query.id}`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
 app.get('/listeCompetences', function (req, res) {
 	let sql = 'SELECT * FROM Competences ORDER BY libelle ASC';
 	db.all(sql, [], (err, rows) => {
