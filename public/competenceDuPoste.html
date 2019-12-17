@@ -241,7 +241,9 @@
       dataType: 'json',
       success: function (data) {
         data.forEach(function (d) {
-          $('#listePersos').append(`<option data-id=${d.id}>${d.nom} ${d.prenoms} - ${posteLibelle}</option>`);
+          
+          console.log(d)
+          $('#listePersos').append(`<option data-id=${d.id}>${d.nom} ${d.prenoms} - ${d.posteLibelle}</option>`);
         });
       },
       error: function (x, error) {
