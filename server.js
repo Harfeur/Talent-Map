@@ -163,6 +163,16 @@ app.get('/suggestTuteur', function (req, res) {
 	});
 });
 
+app.get('/toutesFormations', function(req, res) {
+	let sql = `SELECT * FROM Formations`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
 app.get('/uneFormation', function(req, res) {
 	let query = req.query;
 	let sql = `SELECT * FROM Formations WHERE Formations.id=${query.id}`;
