@@ -133,7 +133,8 @@ app.get('/competencesPersonnel', function (req, res) {
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
 				and CompetencesPersonnels.fk_id_competence=Competences.id
 				and Personnels.id=${query.idPersonnel}
-				and Competences.id IN (SELECT Competences.id FROM Postes, Competences, CompetencesPostes 
+				and Competences.id 
+				IN (SELECT Competences.id FROM Postes, Competences, CompetencesPostes 
 				where Postes.id=CompetencesPostes.fk_id_poste 
 				and CompetencesPostes.fk_id_competence=Competences.id
 				and Postes.id=${query.idPoste});`;
