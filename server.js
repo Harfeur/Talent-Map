@@ -163,7 +163,42 @@ app.get('/suggestTuteur', function(req, res) {
 	});
 });
 
+app.get('/uneFormation', function(req, res) {
+	let query = req.query;
+	let sql = `SELECT * FROM Formations WHERE Formations.id=${query.id}`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
 
+app.get('/formationDateValidite', function(req, res) {
+	let query = req.query;
+	let sql = `SELECT Personnels.id, Personnels.nom, Formations.id, Formations.libelle, FormationsPersonnels.date_validite 
+				FROM Personnels, Formations, FormationsPersonnels 
+				WHERE Personnels.id = FormationsPersonnels.fk_id_personnel
+				and FormationsPersonnels.fk_id_formation = Formations.id
+				and FormationsPersonnels.date_validite != null`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
+app.get('/ajoutFormation', function(req, res) {
+	let query = req.query;
+	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},)`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
 
 var server = app.listen(port, function(){
   console.log('listening on *:'+port);
