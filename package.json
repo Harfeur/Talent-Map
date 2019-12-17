@@ -9,7 +9,6 @@
   "author": "David Panzoli",
   "license": "ISC",
   "dependencies": {
-    "angular": "^1.7.9",
     "bootstrap": "^4.4.1",
     "dateformat": "^3.0.3",
     "express": "^4.17.1",
