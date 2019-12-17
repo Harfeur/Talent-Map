@@ -786,6 +786,7 @@ DROP TABLE IF EXISTS Competences;
 CREATE TABLE Competences (
 	id INTEGER PRIMARY KEY,
 	libelle TEXT
+	
 );
 
 INSERT INTO Competences(id,libelle) VALUES
