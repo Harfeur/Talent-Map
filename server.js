@@ -31,7 +31,8 @@ app.get('/unPersonnel', function (req, res) {
 app.get('/personnels', function (req, res) {
 	let sql = `SELECT *, Services.libelle AS serviceLibelle, Postes.libelle AS posteLibelle FROM Personnels, Services, Postes
 				where Personnels.fk_id_service=Services.id
-				and Personnels.fk_id_poste=Postes.id`;
+				and Personnels.fk_id_poste=Postes.id
+				ORDER BY Personnels.nom ASC`;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
 			throw err;
