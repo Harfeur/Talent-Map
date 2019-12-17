@@ -70,7 +70,7 @@ app.get('/listeCompetences', function (req, res) {
 
 app.get('/personnelCompetence', function (req, res) {
 	let query = req.query;
-	let sql = `SELECT nom, pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
+	let sql = `SELECT nom, prenoms pourcentAcquis FROM Personnels, Competences, CompetencesPersonnels 
 				where Personnels.id=CompetencesPersonnels.fk_id_personnel 
 				and CompetencesPersonnels.fk_id_competence=Competences.id 
 				and Competences.id = ${query.id} 
