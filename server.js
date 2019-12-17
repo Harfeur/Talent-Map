@@ -203,7 +203,7 @@ app.get('/toutesFormations', function(req, res) {
 app.get('/formationsUnPersonnel', function(req, res) {
 	let query = req.query;
 	let sql = `SELECT * 
-				FROM Formations, Personnels, FormationPersonnels 
+				FROM Formations, Personnels, FormationsPersonnels 
 				WHERE Personnels.id = ${query.id} 
 				ORDER BY libelle`;
 	db.all(sql, [], (err, rows) => {
