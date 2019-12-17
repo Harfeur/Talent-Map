@@ -409,7 +409,8 @@ INSERT INTO Formations(id,libelle) VALUES
 -- | |_ / _ \| '__| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __| |_) / _ \ '__/ __|/ _ \ 
 -- |  _| (_) | |  | | | | | | (_| | |_| | (_) | | | \__ \  __/  __/ |  \__ \ (_) |
 -- |_|  \___/|_|  |_| |_| |_|\__,_|\__|_|\___/|_| |_|___/_|   \___|_|  |___/\___/ 
---                                                                                
+--                                            
+
 DROP TABLE IF EXISTS FormationsPersonnels;
 
 CREATE TABLE FormationsPersonnels (
@@ -785,40 +786,40 @@ DROP TABLE IF EXISTS Competences;
 
 CREATE TABLE Competences (
 	id INTEGER PRIMARY KEY,
+	categorie INTEGER,
 	libelle TEXT
-	
 );
 
 INSERT INTO Competences(id,libelle) VALUES
-	(1,"Connaître la reglementation juridique"), --1
-	(2,"Connaissance du marché"), --1
-	(3,"Manager une équipe"), --2
-	(4,"Gérer un conflit"), --2
-	(5,"Communication"), --3
-	(6,"Sens du relationnel"), --3
-	(7,"Respect des règles d’éthique"), --3
-	(8,"Organisation"), --2
-	(9,"Force de proposition"), --3
-	(10,"Rigueur"),
-	(11,"Négociation"),
-	(12,"Sens du relationnel et travail en équipe"),
-	(13,"Sens du travail en équipe"),
-	(14,"Respect des délais"),
-	(15,"Esprit d'analyse"),
-	(16,"Réactivité"),
-	(17,"Mobilité"),
-	(18,"Force de persuasion"),
-	(19,"Curiosité, créativité, innovation"),
-	(20,"Anticipation"),
-	(21,"Prise de décision"),
-	(22,"Capacité à motiver les équipes"),
-	(23,"Aptitudes à la délégation"),
-	(24,"Esprit de synthèse"),
-	(25,"Résistance au stress et à l'urgence"),
-	(26,"Diplomatie"),
-	(27,"Coordination de projets"), --2
-	(28,"Goût pour la transmission des savoirs"),
-	(29,"Autonomie");
+	(1,1,"Connaître la reglementation juridique"), --1
+	(2,1,"Connaissance du marché"), --1
+	(3,2,"Manager une équipe"), --2
+	(4,2,"Gérer un conflit"), --2
+	(5,3,"Communication"), --3
+	(6,3,"Sens du relationnel"), --3
+	(7,3,"Respect des règles d’éthique"), --3
+	(8,2,"Organisation"), --2
+	(9,3,"Force de proposition"), --3
+	(10,1,"Rigueur"),
+	(11,2,"Négociation"),
+	(12,2,"Sens du relationnel et travail en équipe"),
+	(13,2,"Sens du travail en équipe"),
+	(14,2,"Respect des délais"),
+	(15,1,"Esprit d'analyse"),
+	(16,1,"Réactivité"),
+	(17,1,"Mobilité"),
+	(18,2,"Force de persuasion"),
+	(19,2,"Curiosité, créativité, innovation"),
+	(20,2,"Anticipation"),
+	(21,3,"Prise de décision"),
+	(22,3,"Capacité à motiver les équipes"),
+	(23,3,"Aptitudes à la délégation"),
+	(24,1,"Esprit de synthèse"),
+	(25,2,"Résistance au stress et à l'urgence"),
+	(26,2,"Diplomatie"),
+	(27,2,"Coordination de projets"), --2
+	(28,1,"Goût pour la transmission des savoirs"),
+	(29,3,"Autonomie");
 
 
 
@@ -896,12 +897,12 @@ CREATE TABLE CompetencesPersonnels (
 );
 
 INSERT INTO CompetencesPersonnels(fk_id_competence,fk_id_personnel,pourcentAcquis) VALUES
-(1,1,85),
-(2,1,32),
-(3,1,28),
-(4,1,55),
-(5,1,95),
-(6,1,96),
+(1,1,90),
+(2,1,40),
+(3,1,40),
+(4,1,70),
+(5,1,100),
+(6,1,100),
 (7,1,47),
 (8,1,85),
 (9,1,87),
