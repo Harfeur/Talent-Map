@@ -200,6 +200,20 @@ app.get('/toutesFormations', function(req, res) {
 	});
 });
 
+app.get('/formationsUnPersonnel', function(req, res) {
+	let query = req.query;
+	let sql = `SELECT * 
+				FROM Formations, Personnels, FormationPersonnels 
+				WHERE Personnels.id = ${query.id} 
+				ORDER BY libelle`;
+	db.all(sql, [], (err, rows) => {
+		if (err) {
+			throw err;
+		}
+		res.send(rows);
+	});
+});
+
 app.get('/uneFormation', function(req, res) {
 	let query = req.query;
 	let sql = `SELECT * FROM Formations WHERE Formations.id=${query.id}`;
