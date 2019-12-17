@@ -210,7 +210,7 @@ app.get('/formationDateValidite', function(req, res) {
 				FROM Personnels, Formations, FormationsPersonnels 
 				WHERE Personnels.id = FormationsPersonnels.fk_id_personnel
 				and FormationsPersonnels.fk_id_formation = Formations.id
-				and FormationsPersonnels.date_validite != null
+				and FormationsPersonnels.date_validite IS NOT NULL
 				ORDER BY FormationsPersonnels.date_validite, Personnels.nom `;
 	db.all(sql, [], (err, rows) => {
 		if (err) {
@@ -222,7 +222,7 @@ app.get('/formationDateValidite', function(req, res) {
 
 app.get('/ajoutFormationPersonnel', function(req, res) {
 	let query = req.query;
-	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},${query.dateFin},${query.heure},${query.dateValidite})`;
+	let sql = `INSERT INTO FormationsPersonnels VALUES (${query.idPersonnel},${query.idFormation},${query.dateDebut},${query.dateFin},${query.heures},${query.dateValidite})`;
 	db.run(sql, ['C'], function(err) {
 		if (err) {
 		  return console.log(err.message);
