@@ -21,13 +21,10 @@
               <option selected disabled></option>
             </select>
             <label for="pourcent1">Pourcentage minimum</label>
-            <select class="form-control mx-2" id="pourcent1">
+            <select class="form-control mx-2 pourcentListe" id="pourcent1">
               <option selected disabled></option>
-              <option pourc=25>25%</option>
-              <option pourc=50>50%</option>
-              <option pourc=75>75%</option>
-              <option pourc=100>100%</option>
             </select>
+            <img src="assets/interro.jpg" alt="?" data-toggle="modal" data-target="#defPourcent">
           </form>
           <form class="form-inline my-4" id="cmp2">
             <label for="listeComp2">Compétence recherchée</label>
@@ -35,13 +32,10 @@
               <option selected disabled></option>
             </select>
             <label for="pourcent2">Pourcentage minimum</label>
-            <select class="form-control mx-2" id="pourcent2">
+            <select class="form-control mx-2 pourcentListe" id="pourcent2">
               <option selected disabled></option>
-              <option pourc=25>25%</option>
-              <option pourc=50>50%</option>
-              <option pourc=75>75%</option>
-              <option pourc=100>100%</option>
             </select>
+            <img src="assets/interro.jpg" alt="?" data-toggle="modal" data-target="#defPourcent">
           </form>
           <form class="form-inline my-4" id="cmp3">
             <label for="listeComp3">Compétence recherchée</label>
@@ -49,16 +43,56 @@
               <option selected disabled></option>
             </select>
             <label for="pourcent3">Pourcentage minimum</label>
-            <select class="form-control mx-2" id="pourcent3">
+            <select class="form-control mx-2 pourcentListe" id="pourcent3">
               <option selected disabled></option>
-              <option pourc=25>25%</option>
-              <option pourc=50>50%</option>
-              <option pourc=75>75%</option>
-              <option pourc=100>100%</option>
             </select>
+            <img src="assets/interro.jpg" alt="?" data-toggle="modal" data-target="#defPourcent">
           </form>
         <table id="tabResul" class="table">
         </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="defPourcent" tabindex="-1" role="dialog" aria-labelledby="significationPourcent" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="significationPourcent">Correspondances</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <tr>
+              <th scope="row">25%</th>
+              <td>Notion</td>
+              <td>Niveau le plus élémentaire</td>
+              <td>Connaissance de l'existence, l'individu en parle de manière générale, aucune expérience de réalisation</td>
+            </tr>
+            <tr>
+              <th scope="row">50%</th>
+              <td>Pratique</td>
+              <td>Stade de l'apprentissage</td>
+              <td>L'individu est capable de mettre en œuvre (appliquer un savoir) mais il a besoin d'apprentissage</td>
+            </tr>
+            <tr>
+              <th scope="row">75%</th>
+              <td>Maîtrise</td>
+              <td>Stade opératoire</td>
+              <td>L'individu est capable d'agir de façon autonome, compétence pratiquée régulièrement et maîtrisée</td>
+            </tr>
+            <tr>
+              <th scope="row">100%</th>
+              <td>Expertise</td>
+              <td>Stade d'exigence optimale</td>
+              <td>Pratique approfondie, capacité à pouvoir transmettre son savoir à autrui</td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">C'est noté 😉</button>
+        </div>
       </div>
     </div>
   </div>
@@ -69,6 +103,10 @@
   let datas = [null, null, null];
 
   $(document).ready(function () {
+    $('.pourcentListe').append('<option pourc=25>Notion</option>');
+    $('.pourcentListe').append('<option pourc=50>Pratique</option>');
+    $('.pourcentListe').append('<option pourc=75>Maîtrise</option>');
+    $('.pourcentListe').append('<option pourc=100>Expertise</option>');
     $.ajax({
       method: 'GET',
       url: 'listeCompetences/',
