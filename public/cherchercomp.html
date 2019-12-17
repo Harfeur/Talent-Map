@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="/packages/bootstrap/dist/css/bootstrap.css" />
 <script src="/packages/jquery/dist/jquery.min.js"></script>
 <script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
+<script src="https://kit.fontawesome.com/8716041d3e.js" crossorigin="anonymous"></script>
 </head>
 
 <body ng-app="gpecApp" ng-controller="controleur">
@@ -24,7 +25,7 @@
             <select class="form-control mx-2 pourcentListe" id="pourcent1">
               <option selected disabled></option>
             </select>
-            <img src="assets/interro.jpg" alt="?" data-toggle="modal" data-target="#defPourcent">
+            <i class="fas fa-question" data-toggle="modal" data-target="#defPourcent" ></i>
           </form>
           <form class="form-inline my-4" id="cmp2">
             <label for="listeComp2">Compétence recherchée</label>
@@ -35,7 +36,7 @@
             <select class="form-control mx-2 pourcentListe" id="pourcent2">
               <option selected disabled></option>
             </select>
-            <img src="assets/interro.jpg" alt="?" data-toggle="modal" data-target="#defPourcent">
+            <i class="fas fa-question" data-toggle="modal" data-target="#defPourcent" ></i>
           </form>
           <form class="form-inline my-4" id="cmp3">
             <label for="listeComp3">Compétence recherchée</label>
@@ -46,7 +47,7 @@
             <select class="form-control mx-2 pourcentListe" id="pourcent3">
               <option selected disabled></option>
             </select>
-            <img src="assets/interro.jpg" alt="?" data-toggle="modal" data-target="#defPourcent">
+            <i class="fas fa-question" data-toggle="modal" data-target="#defPourcent" ></i>
           </form>
         <table id="tabResul" class="table">
         </table>
@@ -166,7 +167,7 @@
       }
       data = sets[0];
       data.forEach(d => {
-      $('#tabResul').append(`<tr><td>${d.nom}</td></tr>`);
+      $('#tabResul').append(`<tr><td>${d.nom} ${d.prenoms} - ${d.posteLibelle}</td></tr>`);
       });
     }
 

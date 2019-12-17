@@ -9,6 +9,12 @@
 	<link rel="stylesheet" type="text/css" href="/packages/bootstrap/dist/css/bootstrap.css" />
 	<script src="/packages/jquery/dist/jquery.min.js"></script>
 	<script src="/packages/bootstrap/dist/js/bootstrap.js"></script>
+
+	<script src="js/RGraph.common.core.js"></script>
+	<script src="js/RGraph.common.dynamic.js"></script>
+	<script src="js/RGraph.common.tooltips.js"></script>
+	<script src="js/RGraph.common.effects.js"></script>
+	<script src="js/RGraph.radar.js"></script>
 </head>
 
 <body ng-app="gpecApp" ng-controller="controleur">
@@ -26,24 +32,73 @@
 		<h1 style="font-size: 50px; text-align: center;" id="nom"></h1>
 		<div class="row">
 			<div class="col-3" id="adresse">
-            </div>
+			</div>
 			<div class="col-3" id="nationalité">
-            </div>
+			</div>
 			<div class="col-3" id="date-naissance">
-            </div>
+			</div>
 			<div class="col-3" id="sexe">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6" id ="service"></div>
-            <div class="col-4" id="emploi"></div>
-            <div class="col-2" id = "qualification"></div>
-        </div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6" id="service"></div>
+			<div class="col-4" id="emploi"></div>
+			<div class="col-2" id="qualification"></div>
+		</div>
+		<div class="row">
+			<canvas style="margin: auto; display: block; padding: 0;" id="cvs" width="500" height="400">
+				[No canvas support]
+			</canvas>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<table class="table" id="competences" style="margin-top: 20px;"></table>
+			</div>
+			<div class="col-6">
+				<table class="table" id="formations" style="margin-top: 20px;"></table>
+			</div>
+		</div>
 	</div>
 	<script src="js/include-html.js"></script>
 </body>
 <script>
 	//either use jQuery
+
+	function afficherRadar(val, noms) {
+		new RGraph.Radar({
+			id: 'cvs',
+			data: [
+				val
+			],
+			options: {
+				backgroundCirclesPoly: true,
+				backgroundCirclesSpacing: 30,
+				colors: ['transparent'],
+				axesColor: 'transparent',
+				highlights: true,
+				colorsStroke: ['red'],
+				linewidth: 3,
+				labels: noms,
+				textSize: 16
+			}
+		}).trace().responsive([{
+				maxWidth: 600,
+				width: 300,
+				height: 300,
+				css: {
+					'float': 'none'
+				}
+			},
+			{
+				maxWidth: null,
+				width: 500,
+				height: 400,
+				css: {
+					'float': 'right'
+				}
+			}
+		]);
+	}
 	$(document).ready(function () {
 		$.ajax({
 			method: 'GET',
@@ -51,7 +106,9 @@
 			dataType: 'json',
 			success: function (data) {
 				data.forEach(function (d) {
-					$('#personnels').append(`<option data-id=${d.id}>${d.nom}</option>`);
+					$('#personnels').append(
+						`<option data-id=${d.pid}>${d.nom} ${d.prenoms} - ${d.posteLibelle}</option>`
+					);
 				});
 			},
 			error: function (x, error) {
@@ -68,22 +125,81 @@
 					id: $('#personnels option:selected').attr('data-id')
 				},
 				success: function (data) {
-                    d = data[0];
-                    $('#nom').html(d.prenoms + " " + d.nom);
-                    $('#adresse').html("<strong>Adresse :</strong><br>" + d.adresse.replace(",", "<br>"));
-                    $('#nationalité').html("<strong>Nationalité :</strong><br>" + d.nationalité);
-                    var date = new Date(d.date_naissance);
-                    $('#date-naissance').html("<strong>Date de Naissance :</strong><br>" + date.toLocaleDateString('fr-FR', {year: 'numeric', month: 'long', day: 'numeric' }));
-                    $('#sexe').html("<strong>Sexe :</strong><br>" + d.sexe);
-                    $('#service').html("<strong>Service :</strong><br>" + d.serviceLibelle);
-                    $('#emploi').html("<strong>Emploi :</strong><br>" + d.posteLibelle);
-                    $('#qualification').html("<strong>Qualification :</strong><br>" + d.qualification);
+					d = data[0];
+					$('#nom').html(d.prenoms + " " + d.nom);
+					$('#adresse').html("<strong>Adresse :</strong><br>" + d.adresse.replace(
+						",", "<br>"));
+					$('#nationalité').html("<strong>Nationalité :</strong><br>" + d
+						.nationalité);
+					var date = new Date(d.date_naissance);
+					$('#date-naissance').html("<strong>Date de Naissance :</strong><br>" + date
+						.toLocaleDateString('fr-FR', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric'
+						}));
+					$('#sexe').html("<strong>Sexe :</strong><br>" + d.sexe);
+					$('#service').html("<strong>Service :</strong><br>" + d.serviceLibelle);
+					$('#emploi').html("<strong>Emploi :</strong><br>" + d.posteLibelle);
+					$('#qualification').html("<strong>Qualification :</strong><br>" + d
+						.qualification);
 				},
 				error: function (x, error) {
 					console.log(error);
 				}
-            });
-        });
+			});
+			$.ajax({
+				method: 'GET',
+				url: 'competencesDunPersonnel/',
+				dataType: 'json',
+				data: {
+					id: $('#personnels option:selected').attr('data-id')
+				},
+				success: function (data) {
+					let L = [];
+					let noms = [];
+					$('#competences').html("");
+					$('#competences').append(
+						`<tr class="table-primary"><th scope="col">Compétences</th><th></th></tr>`
+					);
+					data.forEach(d => {
+						if (d.pourcentAcquis != 0) {
+							$('#competences').append(
+								`<tr><td>${d.libelle}</td><td>${d.pourcentAcquis}</td></tr>`
+							);
+							L.push(d.pourcentAcquis);
+							noms.push(d.libelle);
+						}
+					});
+					afficherRadar(L, noms);
+				},
+				error: function (x, error) {
+					console.log(error);
+				}
+			});
+			$.ajax({
+				method: 'GET',
+				url: 'formationsUnPersonnel/',
+				dataType: 'json',
+				data: {
+					id: $('#personnels option:selected').attr('data-id')
+				},
+				success: function (data) {
+					$('#formations').html("");
+					$('#formations').append(
+						`<tr class="table-primary"><th scope="col">Formations</th></tr>`
+					);
+					data.forEach(d => {
+						$('#formations').append(
+							`<tr><td>${d.libelle}</td></tr>`
+						);
+					});
+				},
+				error: function (x, error) {
+					console.log(error);
+				}
+			});
+		});
 	});
 </script>
 
