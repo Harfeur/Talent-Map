@@ -165,7 +165,7 @@
 					data.forEach(d => {
 						if (d.pourcentAcquis != 0) {
 							$('#competences').append(
-								`<tr><td>${d.libelle}</td><td>${d.pourcentAcquis}</td></tr>`
+								`<tr><td>${d.libelle}</td><td>${d.pourcentAcquis} %</td></tr>`
 							);
 							L.push(d.pourcentAcquis);
 							noms.push(d.libelle);
